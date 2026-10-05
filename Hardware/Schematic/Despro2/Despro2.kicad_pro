@@ -744,7 +744,7 @@
         "uuid": "888e606d-62ca-412b-9b69-638c8c528506"
       }
     ],
-    "used_designators": "U1,U3,D1,D11-21,#PWR2-6,#PWR21-22,#PWR146-149,Q1-2,#FLG3-4,R7-10,J1-3,J5,J8,TP1-4,H3-6",
+    "used_designators": "U1,U3,D1,D11-21,#PWR1-7,#PWR21-22,#PWR24-26,#PWR44-45,#PWR146-149,Q1-2,#FLG3-4,R7-10,R18,J1-3,J5,J8-10,J22,TP1-4,H3-6,C20,SW2",
     "variants": []
   },
   "sheets": [
@@ -759,6 +759,10 @@
     [
       "7cefe5ff-f583-4fe7-bdce-edcba7d7a266",
       "Power Supply"
+    ],
+    [
+      "0d4f9158-ea35-4a27-b8e5-4b048d7c9d3a",
+      "GPIO_Pinout"
     ],
     [
       "dfb8ff18-6c2b-46fd-910c-17324d88f30c",
