@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/telemetry_repository.dart';
@@ -11,8 +12,6 @@ class TelemetryScreen extends StatefulWidget {
 }
 
 class _TelemetryScreenState extends State<TelemetryScreen> {
-  int _selectedSubTab = 0; // 0: ESP32, 1: Resusci Baby QCPR
-
   @override
   Widget build(BuildContext context) {
     final repo = TelemetryRepository.instance;
@@ -25,118 +24,86 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Sub-Tabs: ESP32 vs Resusci Baby QCPR
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: AppColors.surfacePurple,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: AppColors.purple.withValues(alpha: 0.25),
+              // Hardware Header (Frosted Glassmorphism, NO status indicators)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF141224).withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.12),
+                        width: 1.2,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppColors.purple.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.memory_rounded,
+                            color: AppColors.purple,
+                            size: 24,
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'ESP32-C3 Actuator Hub',
+                                style: AppTypography.sans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'Robotic Actuator & Sensor Board',
+                                style: AppTypography.sans(
+                                  fontSize: 12,
+                                  color: AppColors.gray,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _selectedSubTab = 0),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            color: _selectedSubTab == 0
-                                ? AppColors.purple.withValues(alpha: 0.4)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            'ESP32',
-                            textAlign: TextAlign.center,
-                            style: AppTypography.sans(
-                              fontSize: 14,
-                              fontWeight: _selectedSubTab == 0 ? FontWeight.bold : FontWeight.normal,
-                              color: _selectedSubTab == 0 ? Colors.white : AppColors.gray,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _selectedSubTab = 1),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            color: _selectedSubTab == 1
-                                ? AppColors.purple.withValues(alpha: 0.4)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            'Resusci Baby QCPR',
-                            textAlign: TextAlign.center,
-                            style: AppTypography.sans(
-                              fontSize: 14,
-                              fontWeight: _selectedSubTab == 1 ? FontWeight.bold : FontWeight.normal,
-                              color: _selectedSubTab == 1 ? Colors.white : AppColors.gray,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ),
 
               const SizedBox(height: 24),
 
-              // Real-time Data Section Title
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'real-time data',
-                    style: AppTypography.sans(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: AppColors.green,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Streaming',
-                        style: AppTypography.sans(
-                          fontSize: 12,
-                          color: AppColors.cyan,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              // Clean Real-Time Data Title (NO status indicator)
+              Text(
+                'Real-Time Data',
+                style: AppTypography.sans(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
 
               const SizedBox(height: 14),
 
-              // 6-Card Telemetry Grid (Driven by TelemetryRepository)
+              // Comprehensive ESP32 Telemetry Grid (Glassmorphism)
               ListenableBuilder(
-                listenable: Listenable.merge([repo.esp32Notifier, repo.babyQcprNotifier]),
-                builder: (context, _) {
-                  return _selectedSubTab == 0 ? _buildEsp32Grid() : _buildBabyQcprGrid();
-                },
+                listenable: repo.esp32Notifier,
+                builder: (context, _) => _buildEsp32Grid(),
               ),
 
               const SizedBox(height: 24),
 
-              // Summary Section
+              // Summary Section (Glassmorphism)
               Text(
                 'Summary',
                 style: AppTypography.sans(
@@ -146,40 +113,43 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
               ),
               const SizedBox(height: 12),
               ListenableBuilder(
-                listenable: Listenable.merge([repo.esp32Notifier, repo.babyQcprNotifier]),
-                builder: (context, _) {
-                  return _selectedSubTab == 0 ? _buildEsp32Summary() : _buildBabyQcprSummary();
-                },
+                listenable: repo.esp32Notifier,
+                builder: (context, _) => _buildEsp32Summary(),
               ),
 
               const SizedBox(height: 24),
 
-              // About Section
+              // About Section (Frosted Glassmorphic Card)
               Text(
-                _selectedSubTab == 0 ? 'About ESP32' : 'About Resusci Baby QCPR',
+                'About Controller',
                 style: AppTypography.sans(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: AppColors.surfacePurple,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: AppColors.purple.withValues(alpha: 0.3),
-                  ),
-                ),
-                child: Text(
-                  _selectedSubTab == 0
-                      ? 'Powered by an ultra-compact ESP32-C3 micro on a custom carrier PCB, this controller acts as the central telemetry hub. It handles real-time motor encoder feedback (shaft angle, direction, and RPM) alongside load cell force readings to verify compression dynamics and chest recoil, streaming synchronized hardware metrics directly over BLE.'
-                      : 'Resusci Baby QCPR provides comprehensive sensor telemetry regarding pediatric airway management, chest compression recoil, depth precision, and ventilation rate. Metrics update wirelessly to validate resuscitation protocols.',
-                  style: AppTypography.sans(
-                    fontSize: 13,
-                    height: 1.6,
-                    color: Colors.white.withValues(alpha: 0.9),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                  child: Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF141224).withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.12),
+                        width: 1.2,
+                      ),
+                    ),
+                    child: Text(
+                      'Powered by an ultra-compact ESP32-C3 RISC-V microcontroller on a custom carrier PCB, this controller functions as the primary actuator and telemetry engine. It regulates closed-loop PID velocity control over the BLDC drive, samples load-cell normal force vectors up to 500 Hz, monitors optical quadrature shaft encoders, and broadcasts real-time CPR telemetry streams.',
+                      style: AppTypography.sans(
+                        fontSize: 13,
+                        height: 1.6,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -201,21 +171,49 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
           children: [
             Expanded(
               child: _buildMetricCard(
-                title: 'Instant force',
+                title: 'Instant Force',
                 value: esp.instantForce.toStringAsFixed(1),
                 unit: 'N',
                 icon: Icons.trending_up_rounded,
+                accentColor: AppColors.cyan,
                 onTap: () => _openDetails('Instantaneous Force', esp.instantForce.toStringAsFixed(1), 'N'),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: _buildMetricCard(
-                title: 'Peak force',
+                title: 'Peak Force',
                 value: esp.peakForce.toStringAsFixed(1),
                 unit: 'N',
                 icon: Icons.compress_rounded,
+                accentColor: AppColors.purple,
                 onTap: () => _openDetails('Peak Force', esp.peakForce.toStringAsFixed(1), 'N'),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildMetricCard(
+                title: 'Stroke Depth',
+                value: esp.compressionDepth.toStringAsFixed(1),
+                unit: 'CM',
+                icon: Icons.straighten_rounded,
+                accentColor: AppColors.cyan,
+                onTap: () => _openDetails('Compression Depth', esp.compressionDepth.toStringAsFixed(1), 'CM'),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildMetricCard(
+                title: 'Compression Rate',
+                value: esp.compressionRate.toStringAsFixed(0),
+                unit: 'CPM',
+                icon: Icons.favorite_rounded,
+                accentColor: AppColors.purple,
+                onTap: () => _openDetails('Compression Rate', esp.compressionRate.toStringAsFixed(0), 'CPM'),
               ),
             ),
           ],
@@ -229,6 +227,7 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                 value: esp.positionAngle.toStringAsFixed(1),
                 unit: '°',
                 icon: Icons.rotate_right_rounded,
+                accentColor: AppColors.cyan,
                 onTap: () => _openDetails('Position Angle', esp.positionAngle.toStringAsFixed(1), '°'),
               ),
             ),
@@ -239,6 +238,7 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                 value: esp.motorSpeed.toStringAsFixed(0),
                 unit: 'RPM',
                 icon: Icons.speed_rounded,
+                accentColor: AppColors.purple,
                 onTap: () => _openDetails('Motor Speed', esp.motorSpeed.toStringAsFixed(0), 'RPM'),
               ),
             ),
@@ -253,7 +253,8 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                 value: esp.direction,
                 unit: '',
                 icon: Icons.sync_rounded,
-                onTap: () => _openDetails('Direction', esp.direction, ''),
+                accentColor: AppColors.cyan,
+                onTap: () => _openDetails('Motor Direction', esp.direction, ''),
               ),
             ),
             const SizedBox(width: 12),
@@ -263,88 +264,8 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
                 value: '${esp.compressionCount}',
                 unit: 'CYC',
                 icon: Icons.repeat_rounded,
+                accentColor: AppColors.purple,
                 onTap: () => _openDetails('Compression Count', '${esp.compressionCount}', 'CYC'),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBabyQcprGrid() {
-    final qcpr = TelemetryRepository.instance.babyQcpr;
-
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: _buildMetricCard(
-                title: 'ventilation volume',
-                value: qcpr.ventilationVolume.toStringAsFixed(0),
-                unit: 'ML',
-                icon: Icons.air_rounded,
-                onTap: () => _openDetails('Ventilation Volume', qcpr.ventilationVolume.toStringAsFixed(0), 'ML'),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildMetricCard(
-                title: 'Compression rate',
-                value: qcpr.compressionRate.toStringAsFixed(1),
-                unit: 'CPM',
-                icon: Icons.favorite_rounded,
-                onTap: () => _openDetails('Compression Rate', qcpr.compressionRate.toStringAsFixed(1), 'CPM'),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildMetricCard(
-                title: 'Compression Depth',
-                value: qcpr.compressionDepth.toStringAsFixed(1),
-                unit: 'CM',
-                icon: Icons.straighten_rounded,
-                onTap: () => _openDetails('Compression Depth', qcpr.compressionDepth.toStringAsFixed(1), 'CM'),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildMetricCard(
-                title: 'Compression Count',
-                value: '${qcpr.compressionCount}',
-                unit: 'CYC',
-                icon: Icons.repeat_rounded,
-                onTap: () => _openDetails('Compression Count', '${qcpr.compressionCount}', 'CYC'),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildMetricCard(
-                title: 'Release OK',
-                value: qcpr.releaseOk ? 'True' : 'False',
-                unit: '',
-                isAlert: !qcpr.releaseOk,
-                icon: qcpr.releaseOk ? Icons.check_circle_outline : Icons.cancel_outlined,
-                onTap: () => _openDetails('Release Status', qcpr.releaseOk ? 'True' : 'False', ''),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _buildMetricCard(
-                title: 'Breaths',
-                value: '${qcpr.breaths}',
-                unit: 'BREATHS',
-                icon: Icons.air_rounded,
-                onTap: () => _openDetails('Breaths', '${qcpr.breaths}', 'BREATHS'),
               ),
             ),
           ],
@@ -358,66 +279,70 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
     required String value,
     required String unit,
     required IconData icon,
-    bool isAlert = false,
+    required Color accentColor,
     VoidCallback? onTap,
   }) {
-    final bgColor = isAlert ? AppColors.surfaceRed : AppColors.surfaceCard;
-    final accentColor = isAlert ? AppColors.red : AppColors.cyan;
-
-    return InkWell(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: accentColor.withValues(alpha: 0.35),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      value,
-                      style: AppTypography.mono(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (unit.isNotEmpty) ...[
-                      const SizedBox(width: 4),
-                      Text(
-                        unit,
-                        style: AppTypography.sans(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.gray,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-                Icon(icon, size: 18, color: accentColor),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: AppTypography.sans(
-                fontSize: 13,
-                color: AppColors.white.withValues(alpha: 0.9),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFF10121C).withValues(alpha: 0.55),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: accentColor.withValues(alpha: 0.3),
+                width: 1.2,
               ),
             ),
-          ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          value,
+                          style: AppTypography.mono(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (unit.isNotEmpty) ...[
+                          const SizedBox(width: 4),
+                          Text(
+                            unit,
+                            style: AppTypography.sans(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.gray,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    Icon(icon, size: 18, color: accentColor),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  title,
+                  style: AppTypography.sans(
+                    fontSize: 13,
+                    color: AppColors.white.withValues(alpha: 0.9),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -425,81 +350,60 @@ class _TelemetryScreenState extends State<TelemetryScreen> {
 
   Widget _buildEsp32Summary() {
     final esp = TelemetryRepository.instance.esp32;
-    return Column(
-      children: [
-        _buildSummaryRow('mean peak force', (esp.peakForce * 1.01).toStringAsFixed(1), 'N'),
-        const SizedBox(height: 8),
-        _buildSummaryRow('median speed', esp.motorSpeed.toStringAsFixed(0), 'RPM'),
-        const SizedBox(height: 8),
-        _buildSummaryRow('mean recoil force', '0.2', 'N'),
-      ],
-    );
-  }
-
-  Widget _buildBabyQcprSummary() {
-    final qcpr = TelemetryRepository.instance.babyQcpr;
-    return Column(
-      children: [
-        _buildSummaryRow('mean ventilation volume', (qcpr.ventilationVolume * 0.98).toStringAsFixed(1), 'ML'),
-        const SizedBox(height: 8),
-        _buildSummaryRow('median depth', (qcpr.compressionDepth * 0.98).toStringAsFixed(1), 'CM'),
-        const SizedBox(height: 8),
-        _buildSummaryRow('mean compression rate', (qcpr.compressionRate * 1.04).toStringAsFixed(1), 'CPM'),
-      ],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: const Color(0xFF10121C).withValues(alpha: 0.55),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+          ),
+          child: Column(
+            children: [
+              _buildSummaryRow('Mean Peak Force', (esp.peakForce * 1.01).toStringAsFixed(1), 'N'),
+              const Divider(color: Color(0xFF1C202C), height: 16),
+              _buildSummaryRow('Median Actuator Speed', esp.motorSpeed.toStringAsFixed(0), 'RPM'),
+              const Divider(color: Color(0xFF1C202C), height: 16),
+              _buildSummaryRow('Mean Stroke Depth', esp.compressionDepth.toStringAsFixed(1), 'CM'),
+              const Divider(color: Color(0xFF1C202C), height: 16),
+              _buildSummaryRow('Actuator Core Temp', esp.motorTemp.toStringAsFixed(1), '°C'),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buildSummaryRow(String label, String value, String unit) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceCard,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.cyan.withValues(alpha: 0.3),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: AppTypography.sans(
+            fontSize: 13,
+            color: AppColors.gray,
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: AppTypography.sans(
-              fontSize: 14,
-              color: AppColors.white,
-            ),
+        Text(
+          unit.isNotEmpty ? '$value $unit' : value,
+          style: AppTypography.mono(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: AppColors.white,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                value,
-                style: AppTypography.mono(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                unit,
-                style: AppTypography.sans(
-                  fontSize: 12,
-                  color: AppColors.gray,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   void _openDetails(String title, String value, String unit) {
-    Navigator.push(
-      context,
+    Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => TelemetryDetailsScreen(
+        builder: (_) => TelemetryDetailsScreen(
           title: title,
           currentValue: value,
           unit: unit,

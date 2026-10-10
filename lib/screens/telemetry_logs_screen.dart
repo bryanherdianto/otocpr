@@ -12,7 +12,7 @@ class TelemetryLogsScreen extends StatefulWidget {
 }
 
 class _TelemetryLogsScreenState extends State<TelemetryLogsScreen> {
-  int _selectedCategory = 0; // 0: All, 1: ESP32, 2: Baby QCPR, 3: AI
+  int _selectedCategory = 0; // 0: All, 1: ESP32, 2: AI
   int? _selectedLogIndex;
 
   List<TelemetryLogItem> _filterLogs(List<TelemetryLogItem> allLogs) {
@@ -20,8 +20,6 @@ class _TelemetryLogsScreenState extends State<TelemetryLogsScreen> {
       case 1:
         return allLogs.where((l) => l.category == 'ESP32').toList();
       case 2:
-        return allLogs.where((l) => l.category == 'Baby QCPR').toList();
-      case 3:
         return allLogs.where((l) => l.category == 'AI').toList();
       case 0:
       default:
@@ -189,7 +187,7 @@ class _TelemetryLogsScreenState extends State<TelemetryLogsScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Sub-tabs: All | ESP32 | Baby QCPR | AI
+                      // Sub-tabs: All | ESP32 | AI
                       Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
@@ -201,8 +199,7 @@ class _TelemetryLogsScreenState extends State<TelemetryLogsScreen> {
                           children: [
                             _buildCategoryTab(0, 'All'),
                             _buildCategoryTab(1, 'ESP32'),
-                            _buildCategoryTab(2, 'Baby QCPR'),
-                            _buildCategoryTab(3, 'AI'),
+                            _buildCategoryTab(2, 'AI'),
                           ],
                         ),
                       ),
@@ -360,7 +357,7 @@ class _CopyLogButtonState extends State<_CopyLogButton> {
         child: Icon(
           _copied ? Icons.check_rounded : Icons.copy_rounded,
           size: 16,
-          color: _copied ? AppColors.green : AppColors.cyan,
+          color: _copied ? AppColors.purple : AppColors.cyan,
         ),
       ),
     );

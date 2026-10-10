@@ -1,7 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../theme/app_theme.dart';
+import '../models/telemetry_models.dart';
 import '../services/telemetry_repository.dart';
 
 class DeviceLocationMap extends StatefulWidget {
@@ -23,6 +25,7 @@ class DeviceLocationMap extends StatefulWidget {
 class _DeviceLocationMapState extends State<DeviceLocationMap> {
   late final MapController _mapController;
   double _currentZoom = 15.0;
+  bool _autoFollow = true;
 
   LatLng get _currentPos {
     if (widget.initialPosition != null) return widget.initialPosition!;
@@ -34,12 +37,22 @@ class _DeviceLocationMapState extends State<DeviceLocationMap> {
   void initState() {
     super.initState();
     _mapController = MapController();
+    TelemetryRepository.instance.locationNotifier.addListener(_onLocationChanged);
   }
 
   @override
   void dispose() {
+    TelemetryRepository.instance.locationNotifier.removeListener(_onLocationChanged);
     _mapController.dispose();
     super.dispose();
+  }
+
+  void _onLocationChanged() {
+    if (_autoFollow && mounted) {
+      final loc = TelemetryRepository.instance.location;
+      final target = LatLng(loc.latitude, loc.longitude);
+      _mapController.move(target, _currentZoom);
+    }
   }
 
   void _zoomIn() {
@@ -56,16 +69,19 @@ class _DeviceLocationMapState extends State<DeviceLocationMap> {
     });
   }
 
-  void _recenter() {
+  void _toggleAutoFollow() {
     setState(() {
-      _currentZoom = 15.0;
-      _mapController.move(_currentPos, _currentZoom);
+      _autoFollow = !_autoFollow;
+      if (_autoFollow) {
+        _currentZoom = 15.0;
+        _mapController.move(_currentPos, _currentZoom);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
+    return ValueListenableBuilder<DeviceLocationData>(
       valueListenable: TelemetryRepository.instance.locationNotifier,
       builder: (context, location, child) {
         final pos = _currentPos;
@@ -75,17 +91,24 @@ class _DeviceLocationMapState extends State<DeviceLocationMap> {
           onPointerUp: (_) => widget.onInteractingChange?.call(false),
           onPointerCancel: (_) => widget.onInteractingChange?.call(false),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(18),
             child: Container(
               height: widget.height,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFF141A22),
-                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xFF10121C),
+                borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color: AppColors.purple.withValues(alpha: 0.4),
-                  width: 1.5,
+                  color: Colors.white.withValues(alpha: 0.12),
+                  width: 1.2,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.45),
+                    blurRadius: 18,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
               ),
               child: Stack(
                 children: [
@@ -96,6 +119,11 @@ class _DeviceLocationMapState extends State<DeviceLocationMap> {
                       initialZoom: _currentZoom,
                       minZoom: 3.0,
                       maxZoom: 18.0,
+                      onPositionChanged: (camera, hasGesture) {
+                        if (hasGesture && _autoFollow) {
+                          setState(() => _autoFollow = false);
+                        }
+                      },
                       interactionOptions: const InteractionOptions(
                         flags: InteractiveFlag.all,
                       ),
@@ -107,40 +135,21 @@ class _DeviceLocationMapState extends State<DeviceLocationMap> {
                       ),
                       MarkerLayer(
                         markers: [
+                          // 1. Map Pointer Icon indicating the device location
                           Marker(
                             point: pos,
-                            width: 50,
-                            height: 50,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Container(
-                                  width: 38,
-                                  height: 38,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.cyan.withValues(alpha: 0.25),
-                                  ),
-                                ),
-                                Container(
-                                  width: 22,
-                                  height: 22,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppColors.cyan,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.cyan.withValues(alpha: 0.6),
-                                        blurRadius: 8,
-                                        spreadRadius: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Icon(
-                                    Icons.near_me_rounded,
-                                    size: 14,
-                                    color: Colors.black,
-                                  ),
+                            width: 44,
+                            height: 44,
+                            alignment: Alignment.topCenter,
+                            child: const Icon(
+                              Icons.location_pin,
+                              size: 42,
+                              color: AppColors.purple,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black87,
+                                  blurRadius: 10,
+                                  offset: Offset(0, 3),
                                 ),
                               ],
                             ),
@@ -150,118 +159,106 @@ class _DeviceLocationMapState extends State<DeviceLocationMap> {
                     ],
                   ),
 
-                  // Coordinates Badge (Bottom-Left)
+                  // Floating Glassmorphic Map Controls (Top-Right)
                   Positioned(
-                    left: 12,
-                    bottom: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.8),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: AppColors.cyan.withValues(alpha: 0.4),
+                    top: 10,
+                    right: 10,
+                    child: Column(
+                      children: [
+                        _buildGlassControlButton(
+                          icon: Icons.add_rounded,
+                          onPressed: _zoomIn,
+                          tooltip: 'Zoom in',
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.location_on_rounded, size: 14, color: AppColors.cyan),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Lat: ${pos.latitude.toStringAsFixed(4)}° · Long: ${pos.longitude.toStringAsFixed(4)}°',
-                            style: AppTypography.mono(
-                              fontSize: 11,
-                              color: AppColors.white,
+                        const SizedBox(height: 6),
+                        _buildGlassControlButton(
+                          icon: Icons.remove_rounded,
+                          onPressed: _zoomOut,
+                          tooltip: 'Zoom out',
+                        ),
+                        const SizedBox(height: 6),
+                        _buildGlassControlButton(
+                          icon: _autoFollow ? Icons.near_me_rounded : Icons.my_location_rounded,
+                          onPressed: _toggleAutoFollow,
+                          tooltip: _autoFollow ? 'Tracking' : 'Follow Device',
+                          iconColor: _autoFollow ? AppColors.cyan : Colors.white70,
+                          isActive: _autoFollow,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // OpenStreetMap attribution badge (Bottom-Right, subtle glass)
+                  Positioned(
+                    right: 8,
+                    bottom: 6,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                          ),
+                          child: Text(
+                            '© OpenStreetMap',
+                            style: AppTypography.sans(
+                              fontSize: 9,
+                              color: Colors.white70,
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-
-              // Floating Map Controls (Top-Right: Zoom in, Zoom out, Recenter)
-              Positioned(
-                top: 12,
-                right: 12,
-                child: Column(
-                  children: [
-                    _buildControlButton(
-                      icon: Icons.add_rounded,
-                      onPressed: _zoomIn,
-                      tooltip: 'Zoom in',
-                    ),
-                    const SizedBox(height: 6),
-                    _buildControlButton(
-                      icon: Icons.remove_rounded,
-                      onPressed: _zoomOut,
-                      tooltip: 'Zoom out',
-                    ),
-                    const SizedBox(height: 6),
-                    _buildControlButton(
-                      icon: Icons.my_location_rounded,
-                      onPressed: _recenter,
-                      tooltip: 'Recenter',
-                      iconColor: AppColors.cyan,
-                    ),
-                  ],
-                ),
+                ],
               ),
-
-              // OpenStreetMap attribution badge (Bottom-Right, subtle)
-              Positioned(
-                right: 8,
-                bottom: 6,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.65),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    '© OpenStreetMap',
-                    style: AppTypography.sans(
-                      fontSize: 9,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
-  },
-);
-}
+  }
 
-  Widget _buildControlButton({
+  Widget _buildGlassControlButton({
     required IconData icon,
     required VoidCallback onPressed,
     required String tooltip,
     Color iconColor = Colors.white,
+    bool isActive = false,
   }) {
-    return Container(
-      width: 34,
-      height: 34,
-      decoration: BoxDecoration(
-        color: const Color(0xFF181C22).withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.darkGray),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
-            blurRadius: 6,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: const Color(0xFF121420).withValues(alpha: 0.65),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: isActive ? AppColors.cyan.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.12),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 6,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: IconButton(
-        icon: Icon(icon, size: 18, color: iconColor),
-        onPressed: onPressed,
-        tooltip: tooltip,
-        padding: EdgeInsets.zero,
-        splashRadius: 18,
+          child: IconButton(
+            icon: Icon(icon, size: 18, color: iconColor),
+            onPressed: onPressed,
+            tooltip: tooltip,
+            padding: EdgeInsets.zero,
+            splashRadius: 18,
+          ),
+        ),
       ),
     );
   }

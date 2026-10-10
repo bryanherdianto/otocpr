@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
@@ -26,113 +27,102 @@ class _TelemetryAiScreenState extends State<TelemetryAiScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'AI Diagnostics',
-                        style: AppTypography.sans(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfacePurple,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.purple.withValues(alpha: 0.3)),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.auto_awesome_rounded, size: 14, color: AppColors.purple),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Edge Inference',
-                              style: AppTypography.sans(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  // Clean Header (No slop status pills)
+                  Text(
+                    'AI Diagnostics',
+                    style: AppTypography.sans(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
 
                   const SizedBox(height: 18),
 
-                  // Primary Hero Card
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0x33BB00FF),
-                          Color(0x223BA9DA),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                  // Primary Hero Card (NO GRADIENT, Clean Frosted Glassmorphism)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF141224).withValues(alpha: 0.6),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: AppColors.purple.withValues(alpha: 0.35),
+                            width: 1.2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.4),
+                              blurRadius: 18,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              ai.classification,
+                              style: AppTypography.sans(
+                                fontSize: 19,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              ai.guidelineSubtitle,
+                              style: AppTypography.sans(
+                                fontSize: 13,
+                                color: AppColors.gray,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.purple.withValues(alpha: 0.4)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: AppColors.green.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            '${ai.confidence.toStringAsFixed(1)}% CONFIDENCE',
-                            style: AppTypography.mono(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.green),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          ai.classification,
-                          style: AppTypography.sans(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          ai.guidelineSubtitle,
-                          style: AppTypography.sans(fontSize: 12, color: AppColors.gray),
-                        ),
-                      ],
                     ),
                   ),
 
                   const SizedBox(height: 24),
 
-                  // Diagnostic Insight
+                  // Diagnostic Insight (Glassmorphism)
                   Text(
                     'Diagnostic Insight',
                     style: AppTypography.sans(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfacePurple,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.purple.withValues(alpha: 0.3)),
-                    ),
-                    child: Text(
-                      ai.diagnosticInsight,
-                      style: AppTypography.sans(
-                        fontSize: 13,
-                        height: 1.6,
-                        color: Colors.white.withValues(alpha: 0.9),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10121C).withValues(alpha: 0.55),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.12),
+                            width: 1.2,
+                          ),
+                        ),
+                        child: Text(
+                          ai.diagnosticInsight,
+                          style: AppTypography.sans(
+                            fontSize: 13,
+                            height: 1.6,
+                            color: Colors.white.withValues(alpha: 0.9),
+                          ),
+                        ),
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 24),
 
-                  // Data Evidence Grid
+                  // Data Evidence Grid (Clean glass cards, NO status pills, NO green)
                   Text(
                     'Data Evidence',
                     style: AppTypography.sans(fontSize: 18, fontWeight: FontWeight.bold),
@@ -141,20 +131,18 @@ class _TelemetryAiScreenState extends State<TelemetryAiScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: _buildEvidenceCard(
+                        child: _buildGlassEvidenceCard(
                           'Tidal Volume',
                           '${ai.tidalVolume.toStringAsFixed(0)} ML',
-                          'Nominal',
                           AppColors.cyan,
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _buildEvidenceCard(
+                        child: _buildGlassEvidenceCard(
                           'Stroke Force',
                           '${ai.strokeForce.toStringAsFixed(1)} N',
-                          'Target',
-                          AppColors.cyan,
+                          AppColors.purple,
                         ),
                       ),
                     ],
@@ -163,20 +151,18 @@ class _TelemetryAiScreenState extends State<TelemetryAiScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: _buildEvidenceCard(
+                        child: _buildGlassEvidenceCard(
                           'Recoil Residual',
                           '${ai.recoilResidual.toStringAsFixed(1)} N',
-                          'Clear',
-                          AppColors.green,
+                          AppColors.cyan,
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _buildEvidenceCard(
+                        child: _buildGlassEvidenceCard(
                           'Fatigue Drift',
                           '${ai.fatigueDrift.toStringAsFixed(1)}%',
-                          'Low',
-                          AppColors.green,
+                          AppColors.purple,
                         ),
                       ),
                     ],
@@ -184,64 +170,92 @@ class _TelemetryAiScreenState extends State<TelemetryAiScreen> {
 
                   const SizedBox(height: 24),
 
-                  // Window History / Trend Bar
+                  // Window History (Glassmorphism, NO GREEN, explicit legend for blue/purple/red)
                   Text(
                     'Window History',
                     style: AppTypography.sans(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0F1216),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.cyan.withValues(alpha: 0.25)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(18),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                      child: Container(
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10121C).withValues(alpha: 0.55),
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.12),
+                            width: 1.2,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Session Health Index', style: AppTypography.sans(fontSize: 13, color: AppColors.gray)),
-                            Text(
-                              '${ai.sessionHealthIndex.toStringAsFixed(1)}%',
-                              style: AppTypography.mono(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.green),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Session Protocol Index', style: AppTypography.sans(fontSize: 13, color: AppColors.gray)),
+                                Text(
+                                  '${ai.sessionHealthIndex.toStringAsFixed(1)}%',
+                                  style: AppTypography.mono(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.cyan),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 14),
+                            // Segmented History Bar (Strictly: Cyan/Blue = Optimal, Purple = Trim, Red = Warning)
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: Row(
+                                children: [
+                                  Expanded(flex: 7, child: Container(height: 10, color: AppColors.cyan)),
+                                  const SizedBox(width: 2),
+                                  Expanded(flex: 2, child: Container(height: 10, color: AppColors.purple)),
+                                  const SizedBox(width: 2),
+                                  Expanded(flex: 9, child: Container(height: 10, color: AppColors.cyan)),
+                                  const SizedBox(width: 2),
+                                  Expanded(flex: 1, child: Container(height: 10, color: AppColors.red)),
+                                  const SizedBox(width: 2),
+                                  Expanded(flex: 6, child: Container(height: 10, color: AppColors.cyan)),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('-10m', style: AppTypography.mono(fontSize: 10, color: AppColors.gray)),
+                                Text('Now', style: AppTypography.mono(fontSize: 10, color: AppColors.gray)),
+                              ],
+                            ),
+                            const SizedBox(height: 14),
+                            // Color Legend: Explaining Blue, Purple, and Red
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.35),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  _buildLegendItem(AppColors.cyan, 'Optimal Dynamics'),
+                                  _buildLegendItem(AppColors.purple, 'Actuator Trim'),
+                                  _buildLegendItem(AppColors.red, 'Limit Warning'),
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Row(
-                            children: [
-                              Expanded(flex: 6, child: Container(height: 10, color: AppColors.green)),
-                              const SizedBox(width: 2),
-                              Expanded(flex: 2, child: Container(height: 10, color: AppColors.cyan)),
-                              const SizedBox(width: 2),
-                              Expanded(flex: 8, child: Container(height: 10, color: AppColors.green)),
-                              const SizedBox(width: 2),
-                              Expanded(flex: 1, child: Container(height: 10, color: AppColors.purple)),
-                              const SizedBox(width: 2),
-                              Expanded(flex: 5, child: Container(height: 10, color: AppColors.green)),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('-10m', style: AppTypography.mono(fontSize: 10, color: AppColors.gray)),
-                            Text('Now', style: AppTypography.mono(fontSize: 10, color: AppColors.gray)),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
                   ),
 
                   const SizedBox(height: 24),
 
-                  // Raw JSON Data
+                  // Raw JSON Data (Glassmorphic)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -266,19 +280,25 @@ class _TelemetryAiScreenState extends State<TelemetryAiScreen> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF0A0C0E),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.darkGray),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Text(
-                        ai.rawJson,
-                        style: AppTypography.mono(fontSize: 11, height: 1.5, color: const Color(0xFFC0CAD0)),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF0A0C14).withValues(alpha: 0.6),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                        ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            ai.rawJson,
+                            style: AppTypography.mono(fontSize: 11, height: 1.5, color: const Color(0xFFC0CAD0)),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -293,41 +313,55 @@ class _TelemetryAiScreenState extends State<TelemetryAiScreen> {
     );
   }
 
-  Widget _buildEvidenceCard(String label, String value, String status, Color accentColor) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceCard,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: accentColor.withValues(alpha: 0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildGlassEvidenceCard(String label, String value, Color accentColor) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(14),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: const Color(0xFF10121C).withValues(alpha: 0.55),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: accentColor.withValues(alpha: 0.3),
+              width: 1.2,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(label, style: AppTypography.sans(fontSize: 12, color: AppColors.gray)),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: accentColor.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  status,
-                  style: AppTypography.sans(fontSize: 10, fontWeight: FontWeight.w600, color: accentColor),
-                ),
+              const SizedBox(height: 8),
+              Text(
+                value,
+                style: AppTypography.mono(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.white),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: AppTypography.mono(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildLegendItem(Color color, String label) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 5),
+        Text(
+          label,
+          style: AppTypography.sans(fontSize: 10, color: AppColors.gray),
+        ),
+      ],
     );
   }
 }

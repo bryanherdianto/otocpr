@@ -25,12 +25,11 @@ class AppBottomNav extends StatelessWidget {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(0, Icons.home_rounded, 'Home'),
-          _buildNavItem(1, Icons.show_chart_rounded, 'Telemetry'),
-          _buildNavItem(2, Icons.auto_awesome_rounded, 'AI'),
-          _buildNavItem(3, Icons.article_rounded, 'Logs'),
+          Expanded(child: _buildNavItem(0, Icons.home_rounded, 'Home')),
+          Expanded(child: _buildNavItem(1, Icons.show_chart_rounded, 'Telemetry')),
+          Expanded(child: _buildNavItem(2, Icons.auto_awesome_rounded, 'AI')),
+          Expanded(child: _buildNavItem(3, Icons.article_rounded, 'Logs')),
         ],
       ),
     );
@@ -40,29 +39,31 @@ class AppBottomNav extends StatelessWidget {
     final isSelected = currentIndex == index;
     final color = isSelected ? Colors.white : Colors.white.withValues(alpha: 0.3);
 
-    return InkWell(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => onTap(index),
-      borderRadius: BorderRadius.circular(16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: color,
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: AppTypography.sans(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
                 color: color,
+                size: 24,
               ),
-            ),
-          ],
+              const SizedBox(height: 4),
+              Text(
+                label,
+                style: AppTypography.sans(
+                  fontSize: 11,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/telemetry_repository.dart';
@@ -9,9 +10,9 @@ class TelemetryDetailsScreen extends StatefulWidget {
 
   const TelemetryDetailsScreen({
     super.key,
-    this.title = 'Ventilation Volume',
-    this.currentValue = '98',
-    this.unit = 'ML',
+    this.title = 'Instantaneous Force',
+    this.currentValue = '68.5',
+    this.unit = 'N',
   });
 
   @override
@@ -39,18 +40,29 @@ class _TelemetryDetailsScreenState extends State<TelemetryDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Bar: Back Button + Title
+              // Top Bar: Back Button + Clean Title (NO status badges)
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
-                    style: IconButton.styleFrom(
-                      backgroundColor: const Color(0xFF1E1E1E),
-                      padding: const EdgeInsets.all(10),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => Navigator.of(context).pop(),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF141224).withValues(alpha: 0.6),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                          ),
+                          padding: const EdgeInsets.all(10),
+                          child: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 18),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 14),
                   Expanded(
                     child: Text(
                       widget.title,
@@ -60,55 +72,49 @@ class _TelemetryDetailsScreenState extends State<TelemetryDetailsScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceCard,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.cyan.withValues(alpha: 0.4)),
-                    ),
-                    child: Text(
-                      'Live',
-                      style: AppTypography.sans(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.cyan),
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 20),
 
-              // Timeframe Selector Tabs
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: AppColors.surfacePurple,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.purple.withValues(alpha: 0.25)),
-                ),
-                child: Row(
-                  children: List.generate(_timeframes.length, (index) {
-                    final isSelected = _selectedTimeframe == index;
-                    return Expanded(
-                      child: GestureDetector(
-                        onTap: () => setState(() => _selectedTimeframe = index),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: isSelected ? AppColors.purple.withValues(alpha: 0.4) : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            _timeframes[index],
-                            textAlign: TextAlign.center,
-                            style: AppTypography.sans(
-                              fontSize: 13,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                              color: isSelected ? Colors.white : AppColors.gray,
+              // Timeframe Selector Tabs (Glassmorphism)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF10121C).withValues(alpha: 0.6),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                    ),
+                    child: Row(
+                      children: List.generate(_timeframes.length, (index) {
+                        final isSelected = _selectedTimeframe == index;
+                        return Expanded(
+                          child: GestureDetector(
+                            onTap: () => setState(() => _selectedTimeframe = index),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(
+                                color: isSelected ? AppColors.purple.withValues(alpha: 0.4) : Colors.transparent,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                _timeframes[index],
+                                textAlign: TextAlign.center,
+                                style: AppTypography.sans(
+                                  fontSize: 13,
+                                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                                  color: isSelected ? Colors.white : AppColors.gray,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
-                  }),
+                        );
+                      }),
+                    ),
+                  ),
                 ),
               ),
 
@@ -142,7 +148,7 @@ class _TelemetryDetailsScreenState extends State<TelemetryDetailsScreen> {
 
               const SizedBox(height: 16),
 
-              // Section: Data Distribution Chart
+              // Section: Data Distribution Chart (Glassmorphism)
               Text(
                 'Data Distribution',
                 style: AppTypography.sans(
@@ -151,23 +157,29 @@ class _TelemetryDetailsScreenState extends State<TelemetryDetailsScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              Container(
-                height: 220,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0F1216),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.cyan.withValues(alpha: 0.25)),
-                ),
-                child: CustomPaint(
-                  size: Size.infinite,
-                  painter: _TelemetryChartPainter(data: history.chartPoints),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                  child: Container(
+                    height: 220,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF10121C).withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    ),
+                    child: CustomPaint(
+                      size: Size.infinite,
+                      painter: _TelemetryChartPainter(data: history.chartPoints),
+                    ),
+                  ),
                 ),
               ),
 
               const SizedBox(height: 24),
 
-              // Section: Summary Cards
+              // Section: Summary Cards (Glassmorphism)
               Text(
                 'Summary',
                 style: AppTypography.sans(
@@ -176,28 +188,34 @@ class _TelemetryDetailsScreenState extends State<TelemetryDetailsScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceCard,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.cyan.withValues(alpha: 0.3)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStat('Target Range', history.targetRange, displayUnit),
-                    Container(width: 1, height: 36, color: AppColors.gray.withValues(alpha: 0.3)),
-                    _buildStat('Mean Value', history.meanValue, displayUnit),
-                    Container(width: 1, height: 36, color: AppColors.gray.withValues(alpha: 0.3)),
-                    _buildStat('Efficiency', history.efficiency, ''),
-                  ],
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF10121C).withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildStat('Target Range', history.targetRange, displayUnit),
+                        Container(width: 1, height: 36, color: Colors.white.withValues(alpha: 0.1)),
+                        _buildStat('Mean Value', history.meanValue, displayUnit),
+                        Container(width: 1, height: 36, color: Colors.white.withValues(alpha: 0.1)),
+                        _buildStat('Efficiency', history.efficiency, ''),
+                      ],
+                    ),
+                  ),
                 ),
               ),
 
               const SizedBox(height: 24),
 
-              // Section: About Metric
+              // Section: About Metric (Glassmorphism)
               Text(
                 'About ${widget.title}',
                 style: AppTypography.sans(
@@ -206,19 +224,25 @@ class _TelemetryDetailsScreenState extends State<TelemetryDetailsScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: AppColors.surfacePurple,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.purple.withValues(alpha: 0.3)),
-                ),
-                child: Text(
-                  history.description,
-                  style: AppTypography.sans(
-                    fontSize: 13,
-                    height: 1.6,
-                    color: Colors.white.withValues(alpha: 0.9),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF141224).withValues(alpha: 0.55),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    ),
+                    child: Text(
+                      history.description,
+                      style: AppTypography.sans(
+                        fontSize: 13,
+                        height: 1.6,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -269,8 +293,9 @@ class _TelemetryChartPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (data.isEmpty) return;
 
+    // Strict palette: Cyan/Blue bars + Purple trend line
     final paintBar = Paint()
-      ..color = AppColors.cyan.withValues(alpha: 0.8)
+      ..color = AppColors.cyan.withValues(alpha: 0.65)
       ..style = PaintingStyle.fill;
 
     final paintLine = Paint()
@@ -278,7 +303,7 @@ class _TelemetryChartPainter extends CustomPainter {
       ..strokeWidth = 2.5
       ..style = PaintingStyle.stroke;
 
-    final barWidth = size.width / (data.length * 1.5);
+    final barWidth = size.width / (data.length * 1.6);
     final maxVal = 120.0;
 
     final path = Path();
