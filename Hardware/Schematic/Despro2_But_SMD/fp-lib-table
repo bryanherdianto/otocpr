@@ -1,0 +1,6 @@
+(fp_lib_table
+	(version 7)
+	(lib (name "ESP32-SUPERMINI") (type "KiCad") (uri "D:/Download/ESP 32 Super Mini/ESP32-SUPERMINI.pretty") (options "") (descr ""))
+	(lib (name "ESP32C3SUPERMINI") (type "KiCad") (uri "${KIPRJMOD}/ESP32-SUPERMINI/ESP32C3SUPERMINI.pretty") (options "") (descr ""))
+	(lib (name "Footprint") (type "KiCad") (uri "${KIPRJMOD}/Footprint") (options "") (descr ""))
+)

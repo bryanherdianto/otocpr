@@ -17,7 +17,17 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 60.96) (xy 134.62 60.96)
+			(xy 128.27 76.2) (xy 134.62 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "123a9058-e489-4d89-ac06-53eb45919dbc")
+	)
+	(wire
+		(pts
+			(xy 128.27 53.34) (xy 134.62 53.34)
 		)
 		(stroke
 			(width 0)
@@ -37,7 +47,17 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 83.82) (xy 134.62 83.82)
+			(xy 128.27 78.74) (xy 134.62 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c4e5263-fdff-403f-9e66-542e7784f10a")
+	)
+	(wire
+		(pts
+			(xy 128.27 59.69) (xy 134.62 59.69)
 		)
 		(stroke
 			(width 0)
@@ -47,7 +67,7 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 55.88) (xy 134.62 55.88)
+			(xy 128.27 48.26) (xy 134.62 48.26)
 		)
 		(stroke
 			(width 0)
@@ -57,7 +77,7 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 81.28) (xy 134.62 81.28)
+			(xy 128.27 57.15) (xy 134.62 57.15)
 		)
 		(stroke
 			(width 0)
@@ -67,23 +87,13 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 68.58) (xy 134.62 68.58)
+			(xy 128.27 73.66) (xy 134.62 73.66)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "953ad801-9a2f-40dd-9356-06c6b4e3aced")
-	)
-	(wire
-		(pts
-			(xy 128.27 66.04) (xy 134.62 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a89f2746-4614-44f9-81ce-f2b44f9f569c")
+		(uuid "7f35d470-ccac-45bc-a9ea-37c5c3a2fbb0")
 	)
 	(wire
 		(pts
@@ -97,23 +107,149 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 63.5) (xy 134.62 63.5)
+			(xy 128.27 83.82) (xy 134.62 83.82)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d372f0f6-a3d7-4c7e-b26b-9021d9bd08ee")
+		(uuid "b152b972-a43d-4f32-97e4-552b88de52dc")
 	)
 	(wire
 		(pts
-			(xy 128.27 58.42) (xy 134.62 58.42)
+			(xy 128.27 81.28) (xy 134.62 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4b5d614-6769-49f5-b44f-37d3e0c8b150")
+	)
+	(wire
+		(pts
+			(xy 128.27 71.12) (xy 134.62 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c654b050-7b2a-4022-9d5a-32a9358f07e6")
+	)
+	(wire
+		(pts
+			(xy 128.27 50.8) (xy 134.62 50.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "ee6c971e-cb8e-427c-bc14-1d5c6e3a9ced")
+	)
+	(sheet
+		(at 134.62 67.31)
+		(size 16.51 22.86)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "0d4f9158-ea35-4a27-b8e5-4b048d7c9d3a")
+		(property "Sheetname" "GPIO_Pinout"
+			(at 134.62 66.5984 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "GPIO_Pinout.kicad_sch"
+			(at 134.62 90.7546 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "Button" input
+			(at 134.62 73.66 180)
+			(uuid "61cc32e3-066f-4929-87aa-1655a2397a5c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Buzzer_PWM" input
+			(at 134.62 71.12 180)
+			(uuid "745bdf87-df44-404b-8967-b7f353a706f9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LCD_SCL" input
+			(at 134.62 78.74 180)
+			(uuid "483b60b3-11af-447d-a124-d0d9cc918e7a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LCD_SDA" input
+			(at 134.62 76.2 180)
+			(uuid "beb845ff-fc60-4034-b8ad-2d0eb8cbfcd8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "UART_RX" input
+			(at 134.62 81.28 180)
+			(uuid "3d883545-c866-4572-b878-c33fe3555670")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "UART_TX" input
+			(at 134.62 83.82 180)
+			(uuid "3747b960-e0a3-4318-bd25-c46e7b0880dc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "Despro2"
+				(path "/888e606d-62ca-412b-9b69-638c8c528506"
+					(page "4")
+				)
+			)
+		)
 	)
 	(sheet
 		(at 64.77 57.15)
@@ -162,7 +298,7 @@
 	)
 	(sheet
 		(at 134.62 35.56)
-		(size 16.51 53.975)
+		(size 16.51 26.67)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -187,7 +323,7 @@
 			)
 		)
 		(property "Sheetfile" "Motor Driver.kicad_sch"
-			(at 135.128 89.662 0)
+			(at 152.908 61.976 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -198,7 +334,7 @@
 			)
 		)
 		(pin "EnA" input
-			(at 134.62 60.96 180)
+			(at 134.62 53.34 180)
 			(uuid "33927fc9-52fc-4173-abb0-55031432dc1e")
 			(effects
 				(font
@@ -208,7 +344,7 @@
 			)
 		)
 		(pin "IN1" input
-			(at 134.62 55.88 180)
+			(at 134.62 48.26 180)
 			(uuid "f617d1a5-8315-4458-a14c-89be434a1867")
 			(effects
 				(font
@@ -218,7 +354,7 @@
 			)
 		)
 		(pin "IN2" input
-			(at 134.62 58.42 180)
+			(at 134.62 50.8 180)
 			(uuid "1798a172-4f1f-4217-a09f-48892bc7b438")
 			(effects
 				(font
@@ -227,38 +363,8 @@
 				(justify left)
 			)
 		)
-		(pin "EnB" input
-			(at 134.62 63.5 180)
-			(uuid "acd7f175-9a10-484f-8353-2d7231c1dbe9")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "IN3" input
-			(at 134.62 66.04 180)
-			(uuid "fd93123d-d398-49ae-868c-9bc03be17956")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "IN4" input
-			(at 134.62 68.58 180)
-			(uuid "0bb234e3-57bf-4971-8c60-93c4e37d661d")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
 		(pin "LC_DATA" input
-			(at 134.62 81.28 180)
+			(at 134.62 57.15 180)
 			(uuid "aa57fc4d-9bee-486d-9446-c021e5dfca5d")
 			(effects
 				(font
@@ -268,7 +374,7 @@
 			)
 		)
 		(pin "LC_SCK" input
-			(at 134.62 83.82 180)
+			(at 134.62 59.69 180)
 			(uuid "f40e382f-def4-42fe-b560-b153becc7be7")
 			(effects
 				(font
@@ -374,7 +480,7 @@
 			)
 		)
 		(pin "GPIO10" input
-			(at 128.27 83.82 0)
+			(at 128.27 59.69 0)
 			(uuid "8df97c6c-a066-4d53-a1cc-c8a655ef71e7")
 			(effects
 				(font
@@ -384,7 +490,7 @@
 			)
 		)
 		(pin "GPIO2" input
-			(at 128.27 55.88 0)
+			(at 128.27 48.26 0)
 			(uuid "05ef279a-510e-44c8-b102-a841d9afb2f3")
 			(effects
 				(font
@@ -394,7 +500,7 @@
 			)
 		)
 		(pin "GPIO3" input
-			(at 128.27 58.42 0)
+			(at 128.27 50.8 0)
 			(uuid "e4bb1f06-57ba-4295-ba9d-632680f37418")
 			(effects
 				(font
@@ -404,7 +510,7 @@
 			)
 		)
 		(pin "GPIO4" input
-			(at 128.27 60.96 0)
+			(at 128.27 53.34 0)
 			(uuid "ac9aaeae-fdfd-4f32-aa3b-be4fbe360e22")
 			(effects
 				(font
@@ -414,7 +520,7 @@
 			)
 		)
 		(pin "GPIO5" input
-			(at 128.27 81.28 0)
+			(at 128.27 57.15 0)
 			(uuid "17c8e72e-d4c5-4286-8d2b-83713ddf0eb1")
 			(effects
 				(font
@@ -424,7 +530,7 @@
 			)
 		)
 		(pin "GPIO6" input
-			(at 128.27 68.58 0)
+			(at 128.27 71.12 0)
 			(uuid "d82c3c72-c3e2-4c0a-b9ad-83974a50d316")
 			(effects
 				(font
@@ -434,7 +540,7 @@
 			)
 		)
 		(pin "GPIO7" input
-			(at 128.27 66.04 0)
+			(at 128.27 73.66 0)
 			(uuid "99284d7f-d8c0-402b-bc38-929be69d02a1")
 			(effects
 				(font
@@ -444,8 +550,38 @@
 			)
 		)
 		(pin "GPIO8" input
-			(at 128.27 63.5 0)
+			(at 128.27 76.2 0)
 			(uuid "dc7e3dba-4108-41bc-81af-8e8a88e36581")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO9" input
+			(at 128.27 78.74 0)
+			(uuid "0f7dc365-4d41-4205-8d98-6981ee697f26")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO20" input
+			(at 128.27 81.28 0)
+			(uuid "78eaf058-2078-433c-a2de-9d3a5b697335")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO21" input
+			(at 128.27 83.82 0)
+			(uuid "95c839cf-8321-4842-bfb3-b621e4c03f63")
 			(effects
 				(font
 					(size 1.27 1.27)

@@ -1,0 +1,5 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "Custom_Sensor") (type "KiCad") (uri "${KIPRJMOD}/Custom_Sensor.kicad_sym") (options "") (descr ""))
+	(lib (name "SS54") (type "KiCad") (uri "${KIPRJMOD}/Symbol/SS54.kicad_sym") (options "") (descr ""))
+)
