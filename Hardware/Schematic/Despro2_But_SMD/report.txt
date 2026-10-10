@@ -1,0 +1,534 @@
+Info: Processing symbol 'C1:Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm'.
+Info: Processing symbol 'C3:Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm'.
+Info: Processing symbol 'J5:TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal'.
+Info: Processing symbol 'D16:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'C5:Capacitor_THT:CP_Radial_D10.0mm_P5.00mm'.
+Info: Processing symbol 'D15:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'D17:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'D14:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'J3:TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal'.
+Info: Processing symbol 'C10:Capacitor_THT:CP_Radial_D10.0mm_P5.00mm'.
+Info: Processing symbol 'D18:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'D13:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'C2:Capacitor_THT:CP_Radial_D10.0mm_P5.00mm'.
+Info: Processing symbol 'J4:TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal'.
+Info: Processing symbol 'C4:Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm'.
+Info: Processing symbol 'J1:Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical'.
+Info: Processing symbol 'D19:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'D12:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'C6:Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm'.
+Info: Processing symbol 'F1:Fuse:Fuse-Holder-5x20'.
+Info: Processing symbol 'J2:Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical'.
+Info: Processing symbol 'J6:Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical'.
+Info: Processing symbol 'D20:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'D11:Diode_THT:D_DO-201AD_P15.24mm_Horizontal'.
+Info: Processing symbol 'J7:Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical'.
+Info: Processing symbol 'J8:TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal'.
+Info: Processing symbol 'L1:Inductor_THT:L_Toroid_Vertical_L10.0mm_W5.0mm_P5.08mm'.
+Info: Processing symbol 'Q1:Package_TO_SOT_THT:TO-92_Inline'.
+Info: Processing symbol 'Q2:Package_TO_SOT_THT:TO-92_Inline'.
+Info: Processing symbol 'R1:Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal'.
+Info: Processing symbol 'R2:Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal'.
+Info: Processing symbol 'R3:Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal'.
+Info: Processing symbol 'R4:Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal'.
+Info: Processing symbol 'R5:Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal'.
+Info: Processing symbol 'R6:Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal'.
+Info: Processing symbol 'SW1:UNJ_Eric:Switch'.
+Info: Processing symbol 'TP1:Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical'.
+Info: Processing symbol 'TP2:Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical'.
+Info: Processing symbol 'U2:Package_TO_SOT_SMD:TO-263-5_TabPin3'.
+Info: Processing symbol 'U3:ESP32C3SUPERMINI:COMM-SMD_16P-L22.5-W18.0-P2.54-TL (1)'.
+Info: Processing symbol 'U4:Package_TO_SOT_THT:TO-220-15_P2.54x5.08mm_StaggerOdd_Lead4.58mm_Vertical'.
+Updated C2 sheetfile to 'Power Supply.kicad_sch'.
+Updated C2 footprint filters to 'CP_*'.
+Connected C2 pin 1 to +24V.
+Connected C2 pin 2 to GND.
+Updated C2 unit metadata.
+Added C3 (footprint 'Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm').
+Changed REF** reference designator to C3.
+Changed C3 value from C_Disc_D5.0mm_W2.5mm_P5.00mm to 1uF.
+Updated C3 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/a7a60a56-96d3-45b2-9587-753fd2189bd1.
+Updated C3 fields.
+Updated C3 sheetname to '/Power Supply/'.
+Updated C3 sheetfile to 'Power Supply.kicad_sch'.
+Updated C3 footprint filters to 'C_*'.
+Connected C3 pin 1 to +24V.
+Connected C3 pin 2 to GND.
+Updated C3 unit metadata.
+Added C4 (footprint 'Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm').
+Changed REF** reference designator to C4.
+Changed C4 value from C_Disc_D5.0mm_W2.5mm_P5.00mm to 1uF.
+Updated C4 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/804d4dce-6730-4e74-91d0-65bf889d2b6d.
+Updated C4 fields.
+Updated C4 sheetname to '/Power Supply/'.
+Updated C4 sheetfile to 'Power Supply.kicad_sch'.
+Updated C4 footprint filters to 'C_*'.
+Connected C4 pin 2 to GND.
+Connected C4 pin 1 to Net-(C4-Pad1).
+Updated C4 unit metadata.
+Added C5 (footprint 'Capacitor_THT:CP_Radial_D10.0mm_P5.00mm').
+Changed REF** reference designator to C5.
+Changed C5 value from CP_Radial_D10.0mm_P5.00mm to 330uF/25V.
+Updated C5 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/04774f63-6f1c-42f2-a3e0-c324332d08fa.
+Updated C5 fields.
+Updated C5 sheetname to '/Power Supply/'.
+Updated C5 sheetfile to 'Power Supply.kicad_sch'.
+Updated C5 footprint filters to 'CP_*'.
+Connected C5 pin 1 to Net-(C4-Pad1).
+Connected C5 pin 2 to GND.
+Updated C5 unit metadata.
+Added C6 (footprint 'Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm').
+Changed REF** reference designator to C6.
+Changed C6 value from C_Disc_D5.0mm_W2.5mm_P5.00mm to 1uF.
+Updated C6 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/6665b311-d7d9-4e5d-9b83-30b341e11dd2.
+Updated C6 fields.
+Updated C6 sheetname to '/Motor Driver/'.
+Updated C6 sheetfile to 'Motor Driver.kicad_sch'.
+Updated C6 footprint filters to 'C_*'.
+Connected C6 pin 2 to +5V.
+Connected C6 pin 1 to GND.
+Updated C6 unit metadata.
+Added C10 (footprint 'Capacitor_THT:CP_Radial_D10.0mm_P5.00mm').
+Changed REF** reference designator to C10.
+Changed C10 value from CP_Radial_D10.0mm_P5.00mm to 220uF/50V.
+Updated C10 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/995e9cb9-7ad9-4da1-949c-0d27b0f88e02.
+Updated C10 sheetname to '/Motor Driver/'.
+Updated C10 sheetfile to 'Motor Driver.kicad_sch'.
+Updated C10 footprint filters to 'CP_*'.
+Connected C10 pin 1 to +24V.
+Connected C10 pin 2 to GND.
+Updated C10 unit metadata.
+Added D11 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D11.
+Changed D11 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D11 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/e143355b-706c-4c8b-8d6d-ce03665668e0.
+Updated D11 fields.
+Updated D11 sheetname to '/Power Supply/'.
+Updated D11 sheetfile to 'Power Supply.kicad_sch'.
+Updated D11 footprint filters to 'D*DO?201AD*'.
+Connected D11 pin 2 to +24V.
+Connected D11 pin 1 to Net-(D11-K).
+Updated D11 unit metadata.
+Added D12 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D12.
+Changed D12 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D12 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/90b63bd7-f8e4-42e0-a039-6a2b82a4060a.
+Updated D12 fields.
+Updated D12 sheetname to '/Power Supply/'.
+Updated D12 sheetfile to 'Power Supply.kicad_sch'.
+Updated D12 footprint filters to 'D*DO?201AD*'.
+Connected D12 pin 2 to GND.
+Connected D12 pin 1 to Net-(D12-K).
+Updated D12 unit metadata.
+Added D13 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D13.
+Changed D13 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D13 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/4e670396-ed87-4f84-a940-d99d6512c019.
+Updated D13 fields.
+Updated D13 sheetname to '/Motor Driver/'.
+Updated D13 sheetfile to 'Motor Driver.kicad_sch'.
+Updated D13 footprint filters to 'D*DO?201AD*'.
+Connected D13 pin 1 to +24V.
+Connected D13 pin 2 to Net-(D13-A).
+Updated D13 unit metadata.
+Added D14 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D14.
+Changed D14 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D14 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/9b6d553b-4084-445b-8346-5b6d418b71ef.
+Updated D14 fields.
+Updated D14 sheetname to '/Motor Driver/'.
+Updated D14 sheetfile to 'Motor Driver.kicad_sch'.
+Updated D14 footprint filters to 'D*DO?201AD*'.
+Connected D14 pin 2 to Net-(D14-A).
+Connected D14 pin 1 to +24V.
+Updated D14 unit metadata.
+Added D15 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D15.
+Changed D15 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D15 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/4e6e83f9-9c80-4396-893d-e2c654f88bfd.
+Updated D15 fields.
+Updated D15 sheetname to '/Motor Driver/'.
+Updated D15 sheetfile to 'Motor Driver.kicad_sch'.
+Updated D15 footprint filters to 'D*DO?201AD*'.
+Connected D15 pin 1 to +24V.
+Connected D15 pin 2 to Net-(D15-A).
+Updated D15 unit metadata.
+Added D16 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D16.
+Changed D16 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D16 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/c155f7ee-2610-43b2-87f3-0a4e10b138dd.
+Updated D16 fields.
+Updated D16 sheetname to '/Motor Driver/'.
+Updated D16 sheetfile to 'Motor Driver.kicad_sch'.
+Updated D16 footprint filters to 'D*DO?201AD*'.
+Connected D16 pin 2 to Net-(D16-A).
+Connected D16 pin 1 to +24V.
+Updated D16 unit metadata.
+Added D17 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D17.
+Changed D17 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D17 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/6c468e26-921f-4ff3-81b3-81916aba2aa3.
+Updated D17 fields.
+Updated D17 sheetname to '/Motor Driver/'.
+Updated D17 sheetfile to 'Motor Driver.kicad_sch'.
+Updated D17 footprint filters to 'D*DO?201AD*'.
+Connected D17 pin 1 to Net-(D13-A).
+Connected D17 pin 2 to GND.
+Updated D17 unit metadata.
+Added D18 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D18.
+Changed D18 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D18 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/83013bef-83b1-49f1-bf48-b759981061b2.
+Updated D18 fields.
+Updated D18 sheetname to '/Motor Driver/'.
+Updated D18 sheetfile to 'Motor Driver.kicad_sch'.
+Updated D18 footprint filters to 'D*DO?201AD*'.
+Connected D18 pin 2 to GND.
+Connected D18 pin 1 to Net-(D14-A).
+Updated D18 unit metadata.
+Added D19 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D19.
+Changed D19 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D19 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/c217ca8a-2c62-4c8a-b542-3530724948bd.
+Updated D19 fields.
+Updated D19 sheetname to '/Motor Driver/'.
+Updated D19 sheetfile to 'Motor Driver.kicad_sch'.
+Updated D19 footprint filters to 'D*DO?201AD*'.
+Connected D19 pin 1 to Net-(D15-A).
+Connected D19 pin 2 to GND.
+Updated D19 unit metadata.
+Added D20 (footprint 'Diode_THT:D_DO-201AD_P15.24mm_Horizontal').
+Changed REF** reference designator to D20.
+Changed D20 value from D_DO-201AD_P15.24mm_Horizontal to 1N5822.
+Updated D20 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/56412995-7bab-400a-9b91-d5d9639d8b7b.
+Updated D20 fields.
+Updated D20 sheetname to '/Motor Driver/'.
+Updated D20 sheetfile to 'Motor Driver.kicad_sch'.
+Updated D20 footprint filters to 'D*DO?201AD*'.
+Connected D20 pin 2 to GND.
+Connected D20 pin 1 to Net-(D16-A).
+Updated D20 unit metadata.
+Added F1 (footprint 'Fuse:Fuse-Holder-5x20').
+Changed REF** reference designator to F1.
+Changed F1 value from Fuse-Holder-5x20 to Fuse.
+Updated F1 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/92ae7397-66c4-4496-b5f4-a2b126e32f42.
+Updated F1 fields.
+Updated F1 sheetname to '/Power Supply/'.
+Updated F1 sheetfile to 'Power Supply.kicad_sch'.
+Updated F1 footprint filters to '*Fuse*'.
+Connected F1 pin 2 to Net-(SW1-B).
+Connected F1 pin 1 to Net-(J4-Pin_1).
+Updated F1 unit metadata.
+Added J1 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical').
+Changed REF** reference designator to J1.
+Changed J1 value from PinHeader_1x01_P2.54mm_Vertical to Screw_Terminal_01x01.
+Updated J1 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/351c37b9-bdaf-4432-8afc-e1f61a2082bb.
+Updated J1 fields.
+Updated J1 sheetname to '/Level Shifter/'.
+Updated J1 sheetfile to 'GPIO.kicad_sch'.
+Updated J1 footprint filters to 'TerminalBlock*:*'.
+Connected J1 pin 1 to Net-(J1-Pin_1).
+Updated J1 unit metadata.
+Added J2 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical').
+Changed REF** reference designator to J2.
+Changed J2 value from PinHeader_1x01_P2.54mm_Vertical to Screw_Terminal_01x01.
+Updated J2 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/e3de9ff6-1ea2-4b6f-9e8a-ba864271d4a3.
+Updated J2 fields.
+Updated J2 sheetname to '/Level Shifter/'.
+Updated J2 sheetfile to 'GPIO.kicad_sch'.
+Updated J2 footprint filters to 'TerminalBlock*:*'.
+Connected J2 pin 1 to Net-(J2-Pin_1).
+Updated J2 unit metadata.
+Added J3 (footprint 'TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal').
+Changed REF** reference designator to J3.
+Changed J3 value from TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal to Screw_Terminal_01x04.
+Updated J3 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/ede81ab9-8f24-4924-9d4d-009b87366e79.
+Updated J3 fields.
+Updated J3 sheetname to '/Motor Driver/'.
+Updated J3 sheetfile to 'Motor Driver.kicad_sch'.
+Updated J3 footprint filters to 'TerminalBlock*:*'.
+Connected J3 pin 2 to /Load Cell.
+Connected J3 pin 4 to GND.
+Connected J3 pin 1 to +5V.
+Connected J3 pin 3 to /MCU/GPIO10.
+Updated J3 unit metadata.
+Added J4 (footprint 'TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal').
+Changed REF** reference designator to J4.
+Changed J4 value from TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal to Screw_Terminal_01x02.
+Updated J4 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/47103177-cc83-4e92-8cd2-233cba917be0.
+Updated J4 fields.
+Updated J4 sheetname to '/Power Supply/'.
+Updated J4 sheetfile to 'Power Supply.kicad_sch'.
+Updated J4 footprint filters to 'TerminalBlock*:*'.
+Connected J4 pin 2 to GND.
+Connected J4 pin 1 to Net-(J4-Pin_1).
+Updated J4 unit metadata.
+Added J5 (footprint 'TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal').
+Changed REF** reference designator to J5.
+Changed J5 value from TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal to Conn_01x02.
+Updated J5 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/2a6bac19-ece0-45f0-845a-11001acc1191.
+Updated J5 sheetname to '/Motor Driver/'.
+Updated J5 sheetfile to 'Motor Driver.kicad_sch'.
+Updated J5 footprint filters to 'Connector*:*_1x??_*'.
+Connected J5 pin 2 to Net-(D16-A).
+Connected J5 pin 1 to Net-(D15-A).
+Updated J5 unit metadata.
+Added J6 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical').
+Changed REF** reference designator to J6.
+Changed J6 value from PinHeader_1x08_P2.54mm_Vertical to Conn_01x08_Pin.
+Updated J6 symbol association from  to /ec35c60a-bf41-4748-bce4-c3c2fdefb8e1/16ca73f1-8185-47ff-991b-320acdcd9e1c.
+Updated J6 fields.
+Updated J6 sheetname to '/MCU/'.
+Updated J6 sheetfile to 'MCU.kicad_sch'.
+Updated J6 footprint filters to 'Connector*:*_1x??_*'.
+Connected J6 pin 4 to /MCU/GPIO4.
+Connected J6 pin 3 to +3.3V.
+Connected J6 pin 7 to /MCU/GPIO1.
+Connected J6 pin 6 to /MCU/GPIO2.
+Connected J6 pin 1 to +5V.
+Connected J6 pin 8 to /MCU/GPIO0.
+Connected J6 pin 5 to /MCU/GPIO3.
+Connected J6 pin 2 to GND.
+Updated J6 unit metadata.
+Added C1 (footprint 'Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm').
+Added J7 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical').
+Changed REF** reference designator to J7.
+Changed J7 value from PinHeader_1x08_P2.54mm_Vertical to Conn_01x08_Pin.
+Updated J7 symbol association from  to /ec35c60a-bf41-4748-bce4-c3c2fdefb8e1/8d3adfb7-db57-4393-89f1-f8c68c738069.
+Updated J7 fields.
+Updated J7 sheetname to '/MCU/'.
+Updated J7 sheetfile to 'MCU.kicad_sch'.
+Updated J7 footprint filters to 'Connector*:*_1x??_*'.
+Connected J7 pin 8 to /MCU/GPIO21.
+Connected J7 pin 7 to /MCU/GPIO20.
+Connected J7 pin 6 to /MCU/GPIO10.
+Connected J7 pin 3 to /MCU/GPIO7.
+Connected J7 pin 2 to /MCU/GPIO6.
+Connected J7 pin 1 to /Load Cell.
+Connected J7 pin 4 to /MCU/GPIO8.
+Connected J7 pin 5 to /MCU/GPIO9.
+Updated J7 unit metadata.
+Changed REF** reference designator to C1.
+Added J8 (footprint 'TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal').
+Changed REF** reference designator to J8.
+Changed J8 value from TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal to Conn_01x02.
+Updated J8 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/61c7e5d0-a5ff-424a-a0bb-7208167a419f.
+Updated J8 sheetname to '/Motor Driver/'.
+Updated J8 sheetfile to 'Motor Driver.kicad_sch'.
+Updated J8 footprint filters to 'Connector*:*_1x??_*'.
+Connected J8 pin 2 to Net-(D14-A).
+Connected J8 pin 1 to Net-(D13-A).
+Updated J8 unit metadata.
+Changed C1 value from C_Disc_D5.0mm_W2.5mm_P5.00mm to 1uF.
+Added L1 (footprint 'Inductor_THT:L_Toroid_Vertical_L10.0mm_W5.0mm_P5.08mm').
+Changed REF** reference designator to L1.
+Changed L1 value from L_Toroid_Vertical_L10.0mm_W5.0mm_P5.08mm to 47uH/5A.
+Updated L1 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/173ec7f9-e867-45c1-ab25-d04370445850.
+Updated L1 fields.
+Updated L1 sheetname to '/Power Supply/'.
+Updated L1 sheetfile to 'Power Supply.kicad_sch'.
+Updated L1 footprint filters to 'Choke_* *Coil* Inductor_* L_*'.
+Connected L1 pin 1 to Net-(D12-K).
+Connected L1 pin 2 to Net-(C4-Pad1).
+Updated L1 unit metadata.
+Updated C1 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/72d2661b-6b02-4c25-a3ee-2d9cb880399c.
+Added Q1 (footprint 'Package_TO_SOT_THT:TO-92_Inline').
+Changed REF** reference designator to Q1.
+Changed Q1 value from TO-92_Inline to 2N7000.
+Updated Q1 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/a921dd2e-882b-40a0-a3a6-c820b4564c29.
+Updated Q1 fields.
+Updated Q1 sheetname to '/Level Shifter/'.
+Updated Q1 sheetfile to 'GPIO.kicad_sch'.
+Updated Q1 footprint filters to 'TO?92*'.
+Connected Q1 pin 1 to /MCU/GPIO0.
+Connected Q1 pin 2 to +3.3V.
+Connected Q1 pin 3 to Net-(J1-Pin_1).
+Updated Q1 unit metadata.
+Updated C1 fields.
+Added Q2 (footprint 'Package_TO_SOT_THT:TO-92_Inline').
+Changed REF** reference designator to Q2.
+Changed Q2 value from TO-92_Inline to 2N7000.
+Updated Q2 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/fca6d091-1a5c-47a2-915f-f2718d735b0b.
+Updated Q2 fields.
+Updated Q2 sheetname to '/Level Shifter/'.
+Updated Q2 sheetfile to 'GPIO.kicad_sch'.
+Updated Q2 footprint filters to 'TO?92*'.
+Connected Q2 pin 1 to /MCU/GPIO1.
+Connected Q2 pin 2 to +3.3V.
+Connected Q2 pin 3 to Net-(J2-Pin_1).
+Updated Q2 unit metadata.
+Updated C1 sheetname to '/Power Supply/'.
+Added R1 (footprint 'Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal').
+Changed REF** reference designator to R1.
+Changed R1 value from R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal to 10k.
+Updated R1 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/762d6bd1-2866-4b80-a929-adbe37221a42.
+Updated R1 fields.
+Updated R1 sheetname to '/Level Shifter/'.
+Updated R1 sheetfile to 'GPIO.kicad_sch'.
+Updated R1 footprint filters to 'R_*'.
+Connected R1 pin 2 to /MCU/GPIO0.
+Connected R1 pin 1 to +3.3V.
+Updated R1 unit metadata.
+Updated C1 sheetfile to 'Power Supply.kicad_sch'.
+Added R2 (footprint 'Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal').
+Changed REF** reference designator to R2.
+Changed R2 value from R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal to 10k.
+Updated R2 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/138537ee-a529-4e6b-9894-0aa029ddc26e.
+Updated R2 fields.
+Updated R2 sheetname to '/Level Shifter/'.
+Updated R2 sheetfile to 'GPIO.kicad_sch'.
+Updated R2 footprint filters to 'R_*'.
+Connected R2 pin 1 to +5V.
+Connected R2 pin 2 to Net-(J1-Pin_1).
+Updated R2 unit metadata.
+Updated C1 footprint filters to 'C_*'.
+Added R3 (footprint 'Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal').
+Changed REF** reference designator to R3.
+Changed R3 value from R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal to 10k.
+Updated R3 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/87b37189-e026-4799-88cc-4ae286bc9c10.
+Updated R3 fields.
+Updated R3 sheetname to '/Level Shifter/'.
+Updated R3 sheetfile to 'GPIO.kicad_sch'.
+Updated R3 footprint filters to 'R_*'.
+Connected R3 pin 2 to /MCU/GPIO1.
+Connected R3 pin 1 to +3.3V.
+Updated R3 unit metadata.
+Connected C1 pin 2 to Net-(U2-VC).
+Added R4 (footprint 'Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal').
+Changed REF** reference designator to R4.
+Changed R4 value from R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal to 10k.
+Updated R4 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/4b6e72f5-708d-4630-b320-47c900e84be4.
+Updated R4 fields.
+Updated R4 sheetname to '/Level Shifter/'.
+Updated R4 sheetfile to 'GPIO.kicad_sch'.
+Updated R4 footprint filters to 'R_*'.
+Connected R4 pin 2 to Net-(J2-Pin_1).
+Connected R4 pin 1 to +5V.
+Updated R4 unit metadata.
+Connected C1 pin 1 to +24V.
+Added R5 (footprint 'Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal').
+Changed REF** reference designator to R5.
+Changed R5 value from R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal to 10k.
+Updated R5 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/cfc2b209-9453-4507-b06f-d716ea2f5085.
+Updated R5 fields.
+Updated R5 sheetname to '/Power Supply/'.
+Updated R5 sheetfile to 'Power Supply.kicad_sch'.
+Updated R5 footprint filters to 'R_*'.
+Connected R5 pin 2 to +5V.
+Connected R5 pin 1 to Net-(C4-Pad1).
+Updated R5 unit metadata.
+Updated C1 unit metadata.
+Added R6 (footprint 'Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal').
+Changed REF** reference designator to R6.
+Changed R6 value from R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal to 3300.
+Updated R6 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/2122e75c-8898-4fa4-a251-9bcfcf117c4d.
+Updated R6 fields.
+Updated R6 sheetname to '/Power Supply/'.
+Updated R6 sheetfile to 'Power Supply.kicad_sch'.
+Updated R6 footprint filters to 'R_*'.
+Connected R6 pin 1 to +5V.
+Connected R6 pin 2 to GND.
+Updated R6 unit metadata.
+Added C2 (footprint 'Capacitor_THT:CP_Radial_D10.0mm_P5.00mm').
+Added SW1 (footprint 'UNJ_Eric:Switch').
+Changed Switch reference designator to SW1.
+Changed SW1 value from Switch to SW_SPST.
+Updated SW1 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/68170c53-7f67-45a4-9105-b0ccf297480e.
+Updated SW1 fields.
+Updated SW1 sheetname to '/Power Supply/'.
+Updated SW1 sheetfile to 'Power Supply.kicad_sch'.
+Connected SW1 pin 2 to Net-(SW1-B).
+Connected SW1 pin 1 to Net-(D11-K).
+Updated SW1 unit metadata.
+Changed REF** reference designator to C2.
+Added TP1 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical').
+Changed REF** reference designator to TP1.
+Changed TP1 value from PinHeader_1x01_P2.54mm_Vertical to TestPoint.
+Updated TP1 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/b8b3b6ce-58a5-4408-a0fd-1a6c7e5d36ed.
+Updated TP1 fields.
+Updated TP1 sheetname to '/Level Shifter/'.
+Updated TP1 sheetfile to 'GPIO.kicad_sch'.
+Updated TP1 footprint filters to 'Pin* Test*'.
+Connected TP1 pin 1 to Net-(J1-Pin_1).
+Updated TP1 unit metadata.
+Changed C2 value from CP_Radial_D10.0mm_P5.00mm to 220uF/50V.
+Added TP2 (footprint 'Connector_PinHeader_2.54mm:PinHeader_1x01_P2.54mm_Vertical').
+Changed REF** reference designator to TP2.
+Changed TP2 value from PinHeader_1x01_P2.54mm_Vertical to TestPoint.
+Updated TP2 symbol association from  to /a3144b2c-1243-417a-817f-d32d1c7a455a/6167a8a5-7b6f-433e-8ebf-6a8eefb122ac.
+Updated TP2 fields.
+Updated TP2 sheetname to '/Level Shifter/'.
+Updated TP2 sheetfile to 'GPIO.kicad_sch'.
+Updated TP2 footprint filters to 'Pin* Test*'.
+Connected TP2 pin 1 to Net-(J2-Pin_1).
+Updated TP2 unit metadata.
+Updated C2 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/0b02ed3b-8418-427c-9df5-628b83ef6e0e.
+Added U2 (footprint 'Package_TO_SOT_SMD:TO-263-5_TabPin3').
+Changed REF** reference designator to U2.
+Changed U2 value from TO-263-5_TabPin3 to XL4015.
+Updated U2 symbol association from  to /7cefe5ff-f583-4fe7-bdce-edcba7d7a266/2e8626cd-8c9d-45c9-906a-c16cf69e00c8.
+Updated U2 fields.
+Updated U2 sheetname to '/Power Supply/'.
+Updated U2 sheetfile to 'Power Supply.kicad_sch'.
+Updated U2 footprint filters to 'TO?263*'.
+Connected U2 pin 4 to Net-(U2-VC).
+Connected U2 pin 1 to GND.
+Connected U2 pin 3 to Net-(D12-K).
+Connected U2 pin 5 to +24V.
+Connected U2 pin 2 to +5V.
+Connected U2 pin 3 to Net-(D12-K).
+Updated U2 unit metadata.
+Updated C2 fields.
+Added U3 (footprint 'ESP32C3SUPERMINI:COMM-SMD_16P-L22.5-W18.0-P2.54-TL (1)').
+Changed REF** reference designator to U3.
+Changed U3 value from COMM-SMD_16P-L22.5-W18.0-P2.54-TL to ESP32C3-SUPERMINI.
+Updated U3 symbol association from  to /ec35c60a-bf41-4748-bce4-c3c2fdefb8e1/02154684-4bd0-455b-a5d2-f9a6111cf840.
+Updated U3 fields.
+Updated U3 sheetname to '/MCU/'.
+Updated U3 sheetfile to 'MCU.kicad_sch'.
+Connected U3 pin 16 to +5V.
+Connected U3 pin 5 to /MCU/GPIO9.
+Connected U3 pin 15 to GND.
+Connected U3 pin 13 to /MCU/GPIO4.
+Connected U3 pin 1 to /Load Cell.
+Connected U3 pin 14 to +3.3V.
+Connected U3 pin 7 to /MCU/GPIO20.
+Connected U3 pin 6 to /MCU/GPIO10.
+Connected U3 pin 10 to /MCU/GPIO1.
+Connected U3 pin 3 to /MCU/GPIO7.
+Connected U3 pin 2 to /MCU/GPIO6.
+Connected U3 pin 4 to /MCU/GPIO8.
+Connected U3 pin 11 to /MCU/GPIO2.
+Connected U3 pin 9 to /MCU/GPIO0.
+Connected U3 pin 12 to /MCU/GPIO3.
+Connected U3 pin 8 to /MCU/GPIO21.
+Updated U3 unit metadata.
+Updated C2 sheetname to '/Power Supply/'.
+Added U4 (footprint 'Package_TO_SOT_THT:TO-220-15_P2.54x5.08mm_StaggerOdd_Lead4.58mm_Vertical').
+Changed REF** reference designator to U4.
+Changed U4 value from TO-220-15_P2.54x5.08mm_StaggerOdd_Lead4.58mm_Vertical to L298N.
+Updated U4 symbol association from  to /dfb8ff18-6c2b-46fd-910c-17324d88f30c/5f05ec99-9b33-4297-8e4b-cb88b779ab53.
+Updated U4 fields.
+Updated U4 sheetname to '/Motor Driver/'.
+Updated U4 sheetfile to 'Motor Driver.kicad_sch'.
+Updated U4 footprint filters to 'TO?220*StaggerOdd*Vertical*'.
+Connected U4 pin 5 to /MCU/GPIO2.
+Connected U4 pin 8 to GND.
+Connected U4 pin 11 to /MCU/GPIO8.
+Connected U4 pin 12 to /MCU/GPIO6.
+Connected U4 pin 9 to +5V.
+Connected U4 pin 13 to Net-(D15-A).
+Connected U4 pin 3 to Net-(D14-A).
+Connected U4 pin 6 to /MCU/GPIO4.
+Connected U4 pin 2 to Net-(D13-A).
+Connected U4 pin 1 to GND.
+Connected U4 pin 14 to Net-(D16-A).
+Connected U4 pin 15 to GND.
+Connected U4 pin 7 to /MCU/GPIO3.
+Connected U4 pin 4 to +24V.
+Connected U4 pin 10 to /MCU/GPIO7.
+Updated U4 unit metadata.
+Warning: No net found for component J3 pad 5 (no pin 5 in symbol).
+
+
+Info: Total warnings: 1, errors: 0.

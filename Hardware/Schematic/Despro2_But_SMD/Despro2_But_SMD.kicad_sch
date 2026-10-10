@@ -1,0 +1,606 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "888e606d-62ca-412b-9b69-638c8c528506")
+	(paper "A5")
+	(lib_symbols)
+	(text "24V ------------> 5V\n"
+		(exclude_from_sim no)
+		(at 92.71 64.262 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "95963403-a9ab-4d9c-ba7e-162af01c2d49")
+	)
+	(wire
+		(pts
+			(xy 128.27 76.2) (xy 134.62 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "123a9058-e489-4d89-ac06-53eb45919dbc")
+	)
+	(wire
+		(pts
+			(xy 128.27 53.34) (xy 134.62 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "206d1277-bc9a-4614-95a2-22258befb669")
+	)
+	(wire
+		(pts
+			(xy 128.27 41.91) (xy 134.62 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ea71a16-0414-47a3-8756-830b3526d4d3")
+	)
+	(wire
+		(pts
+			(xy 128.27 78.74) (xy 134.62 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4c4e5263-fdff-403f-9e66-542e7784f10a")
+	)
+	(wire
+		(pts
+			(xy 128.27 59.69) (xy 134.62 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6453f843-b627-4073-9170-1d1c3d1f5a38")
+	)
+	(wire
+		(pts
+			(xy 128.27 48.26) (xy 134.62 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "77423805-7f3e-426f-867c-44156bbb7d02")
+	)
+	(wire
+		(pts
+			(xy 128.27 57.15) (xy 134.62 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "78a9e77e-0e90-4b44-97ac-875b9d05e904")
+	)
+	(wire
+		(pts
+			(xy 128.27 73.66) (xy 134.62 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7f35d470-ccac-45bc-a9ea-37c5c3a2fbb0")
+	)
+	(wire
+		(pts
+			(xy 128.27 44.45) (xy 134.62 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ab54d40c-2968-44a3-be8b-cbda553030bd")
+	)
+	(wire
+		(pts
+			(xy 128.27 83.82) (xy 134.62 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b152b972-a43d-4f32-97e4-552b88de52dc")
+	)
+	(wire
+		(pts
+			(xy 128.27 81.28) (xy 134.62 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4b5d614-6769-49f5-b44f-37d3e0c8b150")
+	)
+	(wire
+		(pts
+			(xy 128.27 71.12) (xy 134.62 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c654b050-7b2a-4022-9d5a-32a9358f07e6")
+	)
+	(wire
+		(pts
+			(xy 128.27 50.8) (xy 134.62 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ee6c971e-cb8e-427c-bc14-1d5c6e3a9ced")
+	)
+	(sheet
+		(at 134.62 67.31)
+		(size 16.51 22.86)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "0d4f9158-ea35-4a27-b8e5-4b048d7c9d3a")
+		(property "Sheetname" "GPIO_Pinout"
+			(at 134.62 66.5984 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "GPIO_Pinout.kicad_sch"
+			(at 134.62 90.7546 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "Button" input
+			(at 134.62 73.66 180)
+			(uuid "61cc32e3-066f-4929-87aa-1655a2397a5c")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Buzzer_PWM" input
+			(at 134.62 71.12 180)
+			(uuid "745bdf87-df44-404b-8967-b7f353a706f9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LCD_SCL" input
+			(at 134.62 78.74 180)
+			(uuid "483b60b3-11af-447d-a124-d0d9cc918e7a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LCD_SDA" input
+			(at 134.62 76.2 180)
+			(uuid "beb845ff-fc60-4034-b8ad-2d0eb8cbfcd8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "UART_RX" input
+			(at 134.62 81.28 180)
+			(uuid "3d883545-c866-4572-b878-c33fe3555670")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "UART_TX" input
+			(at 134.62 83.82 180)
+			(uuid "3747b960-e0a3-4318-bd25-c46e7b0880dc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "Despro2_But_SMD"
+				(path "/888e606d-62ca-412b-9b69-638c8c528506"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 64.77 57.15)
+		(size 19.05 13.97)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "7cefe5ff-f583-4fe7-bdce-edcba7d7a266")
+		(property "Sheetname" "Power Supply"
+			(at 64.77 56.4384 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Power Supply.kicad_sch"
+			(at 61.976 72.136 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "Despro2_But_SMD"
+				(path "/888e606d-62ca-412b-9b69-638c8c528506"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 134.62 35.56)
+		(size 16.51 26.67)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "dfb8ff18-6c2b-46fd-910c-17324d88f30c")
+		(property "Sheetname" "Motor Driver"
+			(at 134.62 34.8484 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Motor Driver.kicad_sch"
+			(at 152.908 61.976 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "EnA" input
+			(at 134.62 53.34 180)
+			(uuid "33927fc9-52fc-4173-abb0-55031432dc1e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "IN1" input
+			(at 134.62 48.26 180)
+			(uuid "f617d1a5-8315-4458-a14c-89be434a1867")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "IN2" input
+			(at 134.62 50.8 180)
+			(uuid "1798a172-4f1f-4217-a09f-48892bc7b438")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LC_DATA" input
+			(at 134.62 57.15 180)
+			(uuid "aa57fc4d-9bee-486d-9446-c021e5dfca5d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LC_SCK" input
+			(at 134.62 59.69 180)
+			(uuid "f40e382f-def4-42fe-b560-b153becc7be7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Encoder_A" input
+			(at 134.62 41.91 180)
+			(uuid "cb2b0ef8-9ab8-42f0-ac85-ed9cacfa87f4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "Encoder_B" input
+			(at 134.62 44.45 180)
+			(uuid "4296725f-1a86-4527-877b-fbab209fbeec")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "Despro2_But_SMD"
+				(path "/888e606d-62ca-412b-9b69-638c8c528506"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 93.98 35.56)
+		(size 34.29 54.61)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "ec35c60a-bf41-4748-bce4-c3c2fdefb8e1")
+		(property "Sheetname" "MCU"
+			(at 93.98 34.8484 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "MCU.kicad_sch"
+			(at 93.98 90.7546 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Field2" ""
+			(at 93.98 35.56 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "GPIO0" input
+			(at 128.27 41.91 0)
+			(uuid "e41a4145-dfcb-4bb0-b575-23cc7db6d7a9")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO1" input
+			(at 128.27 44.45 0)
+			(uuid "7e3689d8-85c0-448d-9d3b-b39d2d9dc374")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO10" input
+			(at 128.27 59.69 0)
+			(uuid "8df97c6c-a066-4d53-a1cc-c8a655ef71e7")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO2" input
+			(at 128.27 48.26 0)
+			(uuid "05ef279a-510e-44c8-b102-a841d9afb2f3")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO3" input
+			(at 128.27 50.8 0)
+			(uuid "e4bb1f06-57ba-4295-ba9d-632680f37418")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO4" input
+			(at 128.27 53.34 0)
+			(uuid "ac9aaeae-fdfd-4f32-aa3b-be4fbe360e22")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO5" input
+			(at 128.27 57.15 0)
+			(uuid "17c8e72e-d4c5-4286-8d2b-83713ddf0eb1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO6" input
+			(at 128.27 71.12 0)
+			(uuid "d82c3c72-c3e2-4c0a-b9ad-83974a50d316")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO7" input
+			(at 128.27 73.66 0)
+			(uuid "99284d7f-d8c0-402b-bc38-929be69d02a1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO8" input
+			(at 128.27 76.2 0)
+			(uuid "dc7e3dba-4108-41bc-81af-8e8a88e36581")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO9" input
+			(at 128.27 78.74 0)
+			(uuid "0f7dc365-4d41-4205-8d98-6981ee697f26")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO20" input
+			(at 128.27 81.28 0)
+			(uuid "78eaf058-2078-433c-a2de-9d3a5b697335")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "GPIO21" input
+			(at 128.27 83.82 0)
+			(uuid "95c839cf-8321-4842-bfb3-b621e4c03f63")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "Despro2_But_SMD"
+				(path "/888e606d-62ca-412b-9b69-638c8c528506"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
