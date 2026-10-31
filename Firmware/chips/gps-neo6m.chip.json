@@ -1,0 +1,44 @@
+{
+  "name": "gps-neo6m",
+  "author": "Auto-CPR Firmware",
+  "pins": [
+    "VCC",
+    "GND",
+    "RX",
+    "TX"
+  ],
+  "controls": [
+    {
+      "id": "speedKmh",
+      "label": "Speed (km/h)",
+      "type": "range",
+      "min": 0,
+      "max": 120,
+      "step": 1
+    },
+    {
+      "id": "courseDeg",
+      "label": "Heading (deg)",
+      "type": "range",
+      "min": 0,
+      "max": 359,
+      "step": 1
+    },
+    {
+      "id": "satellites",
+      "label": "Satellites Used",
+      "type": "range",
+      "min": 0,
+      "max": 12,
+      "step": 1
+    },
+    {
+      "id": "signal",
+      "label": "Antenna Signal (0=Lost, 1=OK)",
+      "type": "range",
+      "min": 0,
+      "max": 1,
+      "step": 1
+    }
+  ]
+}

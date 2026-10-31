@@ -1,6 +1,7 @@
 import serial
 import csv
 import time
+import argparse
 
 # ==========================================
 # CONFIGURATION
@@ -13,21 +14,39 @@ BAUD_RATE = 115200
 OUTPUT_FILE = 'motor_data_log.csv'
 # ==========================================
 
+WOKWI_RFC2217_URL = 'rfc2217://localhost:4000?ign_set_control'
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Log Auto-CPR + NEO-6M GPS telemetry CSV from ESP32 or Wokwi.")
+    parser.add_argument('--port', default=SERIAL_PORT, help='Serial port (e.g. COM3) or pyserial URL')
+    parser.add_argument('--wokwi', action='store_true', help='Connect to Wokwi VS Code RFC2217 server (localhost:4000)')
+    parser.add_argument('--baud', type=int, default=BAUD_RATE, help='Baud rate (default: 115200)')
+    parser.add_argument('--output', default=OUTPUT_FILE, help='CSV output file path')
+    return parser.parse_args()
+
 def main():
-    print(f"Connecting to {SERIAL_PORT} at {BAUD_RATE} baud...")
+    args = parse_args()
+    port = WOKWI_RFC2217_URL if args.wokwi else args.port
+    baud = args.baud
+    output_file = args.output
+
+    print(f"Connecting to {port} at {baud} baud...")
     
     try:
-        ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+        if '://' in port:
+            ser = serial.serial_for_url(port, baudrate=baud, timeout=1)
+        else:
+            ser = serial.Serial(port, baud, timeout=1)
     except Exception as e:
         print(f"\n[ERROR] Could not open serial port: {e}")
         print("Please check that the SERIAL_PORT variable matches your ESP32 port.")
         return
 
-    print(f"Successfully connected! Logging data to -> {OUTPUT_FILE}")
+    print(f"Successfully connected! Logging data to -> {output_file}")
     print("Press Ctrl+C to stop logging and save.\n")
 
     # Open the CSV file in write mode
-    with open(OUTPUT_FILE, 'w', newline='') as f:
+    with open(output_file, 'w', newline='') as f:
         writer = csv.writer(f)
         
         try:
@@ -48,7 +67,7 @@ def main():
                         f.flush() 
                         
         except KeyboardInterrupt:
-            print(f"\n\nLogging stopped by user. Data successfully saved to {OUTPUT_FILE}")
+            print(f"\n\nLogging stopped by user. Data successfully saved to {output_file}")
             
         finally:
             ser.close()

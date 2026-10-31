@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "author": "Auto-CPR Firmware",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "chip-gps-neo6m",
+      "id": "gps1",
+      "top": 40,
+      "left": 250,
+      "attrs": {
+        "latitude": "-6.2088",
+        "longitude": "106.8456",
+        "altitude": "8.0",
+        "ttffMs": "2000",
+        "speedKmh": "18",
+        "courseDeg": "26",
+        "satellites": "8",
+        "signal": "1"
+      }
+    },
+    {
+      "type": "wokwi-lcd2004",
+      "id": "lcd1",
+      "top": -180,
+      "left": 180,
+      "attrs": {
+        "pins": "i2c"
+      }
+    },
+    {
+      "type": "wokwi-hx711",
+      "id": "scale1",
+      "top": 170,
+      "left": 250,
+      "attrs": {
+        "type": "5kg"
+      }
+    },
+    {
+      "type": "wokwi-ky-040",
+      "id": "enc1",
+      "top": 40,
+      "left": -220,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "ledPwm",
+      "top": -110,
+      "left": -140,
+      "attrs": {
+        "color": "green",
+        "label": "R_PWM (CW)"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "rPwm",
+      "top": -55,
+      "left": -140,
+      "rotate": 90,
+      "attrs": {
+        "value": "220"
+      }
+    }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+
+    [ "gps1:VCC", "esp:3V3", "red", [ "h-38.4", "v134.4" ] ],
+    [ "gps1:GND", "esp:GND.1", "black", [ "h-48", "v96" ] ],
+    [ "gps1:TX", "esp:RX2", "green", [ "h-67.2", "v48" ] ],
+    [ "esp:TX2", "gps1:RX", "gold", [ "h67.2", "v-48" ] ],
+
+    [ "lcd1:VCC", "esp:3V3", "red", [ "h-48", "v355" ] ],
+    [ "lcd1:GND", "esp:GND.1", "black", [ "h-57.6", "v336" ] ],
+    [ "lcd1:SDA", "esp:D21", "cyan", [ "h-38.4", "v220" ] ],
+    [ "lcd1:SCL", "esp:D22", "blue", [ "h-28.8", "v192" ] ],
+
+    [ "scale1:VCC", "esp:3V3", "red", [ "h-48", "v-10" ] ],
+    [ "scale1:GND", "esp:GND.1", "black", [ "h-57.6", "v-30" ] ],
+    [ "scale1:DT", "esp:D19", "orange", [ "h-76.8", "v-96" ] ],
+    [ "scale1:SCK", "esp:D18", "yellow", [ "h-86.4", "v-96" ] ],
+
+    [ "enc1:VCC", "esp:3V3", "red", [ "h80", "v140" ] ],
+    [ "enc1:GND", "esp:GND.1", "black", [ "h90", "v120" ] ],
+    [ "enc1:CLK", "esp:D32", "purple", [ "h60", "v0" ] ],
+    [ "enc1:DT", "esp:D33", "magenta", [ "h70", "v10" ] ],
+
+    [ "esp:D25", "rPwm:2", "limegreen", [ "h-60", "v-130" ] ],
+    [ "rPwm:1", "ledPwm:A", "limegreen", [] ],
+    [ "ledPwm:C", "esp:GND.1", "black", [ "h-30", "v290" ] ]
+  ],
+  "serialMonitor": {
+    "display": "always",
+    "newline": "lf"
+  },
+  "dependencies": {}
+}

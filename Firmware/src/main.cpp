@@ -3,6 +3,61 @@
 #include <LiquidCrystal_I2C.h>
 #include <HX711.h>
 
+// --- NEO-6M GPS (UART2) ---
+// Build-time switches (set in platformio.ini -> build_flags):
+//   ENABLE_GPS=0        -> compile the original firmware with no GPS at all
+//   GPS_USE_EMULATOR=1  -> use the in-firmware NEO-6M emulator instead of a
+//                          physical module (no GPS hardware required)
+//   GPS_ECHO_NMEA=1     -> mirror the raw NMEA stream to Serial (debug only,
+//                          breaks the CSV output)
+//   WOKWI_SIMULATION=1  -> set by the [env:wokwi] build (Wokwi simulator)
+#ifndef ENABLE_GPS
+#define ENABLE_GPS 1
+#endif
+#ifndef GPS_USE_EMULATOR
+#define GPS_USE_EMULATOR 0
+#endif
+#ifndef GPS_ECHO_NMEA
+#define GPS_ECHO_NMEA 0
+#endif
+#ifndef GPS_HUMAN_LOG
+#define GPS_HUMAN_LOG 0
+#endif
+#ifndef LCD_CYCLE_GPS
+#define LCD_CYCLE_GPS 1
+#endif
+
+#if ENABLE_GPS
+#include "gps_neo6m.h"
+
+// NEO-6M module header mapping (GY-NEO6MV2):
+// VCC -> 3.3V or 5V
+// GND -> GND
+// TX  -> Pin 16 (ESP32 RX2)
+// RX  -> Pin 17 (ESP32 TX2)
+const int GPS_RX_PIN = 16;       // ESP32 receives on this pin (module TX)
+const int GPS_TX_PIN = 17;       // ESP32 transmits on this pin (module RX)
+const uint32_t GPS_BAUD = 9600;  // NEO-6M factory default
+Neo6mGps gps;
+
+// Emulator defaults (only used when GPS_USE_EMULATOR=1); override with -D flags.
+#ifndef GPS_SIM_LAT
+#define GPS_SIM_LAT -6.2088
+#endif
+#ifndef GPS_SIM_LON
+#define GPS_SIM_LON 106.8456
+#endif
+#ifndef GPS_SIM_SPEED_KMH
+#define GPS_SIM_SPEED_KMH 18.0
+#endif
+#ifndef GPS_SIM_COURSE_DEG
+#define GPS_SIM_COURSE_DEG 25.9
+#endif
+#ifndef GPS_SIM_SATS
+#define GPS_SIM_SATS 8
+#endif
+#endif // ENABLE_GPS
+
 // --- Load Cell Pins (HX711) ---
 const int LOADCELL_DOUT_PIN = 19; // Connect to DT
 const int LOADCELL_SCK_PIN = 18;  // Connect to SCK
@@ -83,12 +138,41 @@ void setup()
   Serial.begin(115200);  
   
   // Print CSV Header
-  Serial.println("Time(ms),Set_RPM,Actual_RPM,PWM,Raw_Counts,Freq_Hz,LoadCell");
+  Serial.print("Time(ms),Set_RPM,Actual_RPM,PWM,Raw_Counts,Freq_Hz,LoadCell");
+#if ENABLE_GPS
+  // Extra GPS columns are appended so existing CSV consumers keep working.
+  Serial.print(",GPS_Fix,Latitude,Longitude,Satellites,Speed_kmh,Altitude_m,GPS_UTC");
+#endif
+  Serial.println();
+
+#if ENABLE_GPS
+  // GPS setup (started early so the module/emulator can begin acquiring)
+#if GPS_USE_EMULATOR
+  neo6m_sim_config_t gpsCfg;
+  neo6m_sim_default_config(&gpsCfg);
+  gpsCfg.start_lat_deg = GPS_SIM_LAT;
+  gpsCfg.start_lon_deg = GPS_SIM_LON;
+  gpsCfg.seed = (uint32_t)esp_random();
+  neo6m_sim_inputs_t gpsIn;
+  neo6m_sim_default_inputs(&gpsIn);
+  gpsIn.speed_kmh = GPS_SIM_SPEED_KMH;
+  gpsIn.course_deg = GPS_SIM_COURSE_DEG;
+  gpsIn.sats_used = GPS_SIM_SATS;
+  gps.beginEmulator(gpsCfg, gpsIn, GPS_BAUD);
+#else
+  gps.beginUart(Serial2, GPS_RX_PIN, GPS_TX_PIN, GPS_BAUD);
+#endif
+#if GPS_ECHO_NMEA
+  gps.setEcho(&Serial);
+#endif
+#endif // ENABLE_GPS
 
   // Load Cell setup
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
   scale.set_scale(); // Set calibration factor here later
-  scale.tare();      // Auto-zero
+  if (scale.wait_ready_timeout(1000)) {
+    scale.tare();      // Auto-zero
+  }
 
   // Initialize LCD
   lcd.init();
@@ -184,6 +268,11 @@ void loop()
     loadCellValue = scale.get_units(1); // Read once without blocking the loop
   }
 
+#if ENABLE_GPS
+  // Non-blocking GPS read (drains UART2 / runs the emulator)
+  gps.update();
+#endif
+
   timeElapsed = millis() - timeStamp; 
   if (timeElapsed >= sampleRate)
   {
@@ -205,9 +294,96 @@ void loop()
     Serial.print(",");
     Serial.print(rawFrequencyHz);
     Serial.print(",");
-    Serial.println(loadCellValue);
+    Serial.print(loadCellValue);
+#if ENABLE_GPS
+    Serial.print(",");
+    Serial.print(gps.hasFix() ? 1 : 0);
+    Serial.print(",");
+    Serial.print(gps.latitude(), 6);
+    Serial.print(",");
+    Serial.print(gps.longitude(), 6);
+    Serial.print(",");
+    Serial.print(gps.satellites());
+    Serial.print(",");
+    Serial.print(gps.speedKmph(), 2);
+    Serial.print(",");
+    Serial.print(gps.altitudeMeters(), 1);
+    Serial.print(",");
+    char utcBuf[24];
+    gps.formatUtcDateTime(utcBuf, sizeof(utcBuf));
+    Serial.print(utcBuf);
+#endif
+    Serial.println();
+
+#if ENABLE_GPS && GPS_HUMAN_LOG
+    static unsigned long lastGpsPrintMs = 0;
+    if (millis() - lastGpsPrintMs >= 1000) {
+      lastGpsPrintMs = millis();
+      if (millis() > 5000 && gps.charsProcessed() < 10) {
+        Serial.println(F("[GPS] No GPS data received: check wiring"));
+      } else if (gps.hasFix()) {
+        Serial.print(F("[GPS] Lat: "));
+        Serial.print(gps.latitude(), 6);
+        Serial.print(F(" | Lon: "));
+        Serial.print(gps.longitude(), 6);
+        Serial.print(F(" | Alt: "));
+        Serial.print(gps.altitudeMeters(), 1);
+        Serial.print(F(" m | Spd: "));
+        Serial.print(gps.speedKmph(), 1);
+        Serial.print(F(" km/h | Sats: "));
+        Serial.print(gps.satellites());
+        Serial.print(F(" | UTC: "));
+        Serial.println(utcBuf);
+      } else {
+        Serial.println(F("[GPS] Acquiring satellite fix..."));
+      }
+    }
+#endif
     
     // Update LCD
+#if ENABLE_GPS && LCD_CYCLE_GPS
+    bool showGpsPage = ((millis() / 4000) % 2 == 1);
+    static bool prevGpsPage = false;
+    if (showGpsPage != prevGpsPage) {
+      lcd.clear();
+      prevGpsPage = showGpsPage;
+    }
+    if (showGpsPage) {
+      char line[21];
+      if (!gps.isAlive()) {
+        snprintf(line, sizeof(line), "%-20s", "GPS: Check Wiring");
+      } else if (gps.hasFix()) {
+        snprintf(line, sizeof(line), "GPS:FIX Sats:%-2lu     ", (unsigned long)gps.satellites());
+      } else {
+        snprintf(line, sizeof(line), "%-20s", "GPS: Searching...");
+      }
+      lcd.setCursor(0, 0);
+      lcd.print(line);
+
+      if (gps.hasFix()) {
+        snprintf(line, sizeof(line), "Lat:%12.6f    ", gps.latitude());
+        lcd.setCursor(0, 1);
+        lcd.print(line);
+
+        snprintf(line, sizeof(line), "Lon:%12.6f    ", gps.longitude());
+        lcd.setCursor(0, 2);
+        lcd.print(line);
+
+        snprintf(line, sizeof(line), "V:%5.1fkmh A:%4.0fm  ", gps.speedKmph(), gps.altitudeMeters());
+        lcd.setCursor(0, 3);
+        lcd.print(line);
+      } else {
+        snprintf(line, sizeof(line), "RX Bytes:%-10lu ", (unsigned long)gps.charsProcessed());
+        lcd.setCursor(0, 1);
+        lcd.print(line);
+        lcd.setCursor(0, 2);
+        lcd.print("Waiting for 3D lock ");
+        lcd.setCursor(0, 3);
+        lcd.print("UART2 9600 8N1      ");
+      }
+    } else
+#endif
+    {
     // Line 0: Setpoint
     lcd.setCursor(0, 0);
     lcd.print("Setpoint: ");
@@ -239,6 +415,7 @@ void loop()
     lcd.print("PWM Out:  ");
     lcd.print(motorPWM);
     lcd.print("    ");
+    }
   }
   
   driveMotor(motorPWM, true); // Change to 'false' for CCW rotation
