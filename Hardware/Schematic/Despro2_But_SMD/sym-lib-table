@@ -2,4 +2,6 @@
 	(version 7)
 	(lib (name "Custom_Sensor") (type "KiCad") (uri "${KIPRJMOD}/Custom_Sensor.kicad_sym") (options "") (descr ""))
 	(lib (name "SS54") (type "KiCad") (uri "${KIPRJMOD}/Symbol/SS54.kicad_sym") (options "") (descr ""))
+	(lib (name "SK12D07VG4") (type "KiCad") (uri "${KIPRJMOD}/Symbol/SK12D07VG4.kicad_sym") (options "") (descr ""))
+	(lib (name "ESP32-DEVKITC") (type "KiCad") (uri "${KIPRJMOD}/Symbol/ESP32-DEVKITC.kicad_sym") (options "") (descr ""))
 )

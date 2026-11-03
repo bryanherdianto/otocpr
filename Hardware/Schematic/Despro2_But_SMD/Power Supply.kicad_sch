@@ -1490,6 +1490,237 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "SK12D07VG4:SK12D07VG4"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Value" "SK12D07VG4"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Footprint" "SK12D07VG4:SK12D07VG4"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Switch Slide ON ON SPDT Side Slide 0.3A 30VDC PC Pins Bracket Mount/Through Hole Bulk"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "MF" "C&K"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Package" "None"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Price" "None"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "SnapEDA_Link" "https://www.snapeda.com/parts/SK12D07VG4/C%2526K/view-part/?ref=snap"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "MP" "SK12D07VG4"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Availability" "Not in stock"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Check_prices" "https://www.snapeda.com/parts/SK12D07VG4/C%2526K/view-part/?ref=eda"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(symbol "SK12D07VG4_0_0"
+				(rectangle
+					(start -5.08 -2.54)
+					(end 5.08 5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy -1.27 3.048)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -2.54 7.62 270)
+					(length 5.08)
+					(name "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 7.62 270)
+					(length 5.08)
+					(name "2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 0 -5.08 90)
+					(length 5.08)
+					(name "COM"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "COM"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "SS54:SS54_C16103"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1618,7 +1849,7 @@
 						(type background)
 					)
 				)
-				(pin unspecified line
+				(pin passive line
 					(at 5.08 0 180)
 					(length 3.81)
 					(name "A"
@@ -1636,7 +1867,7 @@
 						)
 					)
 				)
-				(pin unspecified line
+				(pin passive line
 					(at -5.08 0 0)
 					(length 3.81)
 					(name "K"
@@ -1647,207 +1878,6 @@
 						)
 					)
 					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "Switch:SW_Wuerth_450301014042"
-			(pin_names
-				(offset 1)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "SW"
-				(at 0 5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "SW_Wuerth_450301014042"
-				(at 0 -5.08 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Button_Switch_THT:SW_Slide-03_Wuerth-WS-SLTV_10x2.5x6.4_P2.54mm"
-				(at 0 -10.16 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.we-online.com/components/products/datasheet/450301014042.pdf"
-				(at 0 -7.62 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Switch slide, single pole double throw"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "changeover single-pole opposite-side-connection double-throw spdt ON-ON"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SW*Wuerth*WS*SLTV*10x2.5x6.4*P2.54mm*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "SW_Wuerth_450301014042_0_1"
-				(circle
-					(center -2.032 0)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.651 0.254) (xy 1.651 2.286)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 2.54)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 2.032 -2.54)
-					(radius 0.4572)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "SW_Wuerth_450301014042_1_1"
-				(rectangle
-					(start -3.175 3.81)
-					(end 3.175 -3.81)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 2.54)
-					(name "B"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 -2.54 180)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 5.08 2.54 180)
-					(length 2.54)
-					(name "A"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2398,7 +2428,7 @@
 		(uuid "4a9b6282-2585-4037-8d59-cbada7de067c")
 	)
 	(junction
-		(at 68.58 48.26)
+		(at 66.04 48.26)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "715f1161-ed4b-4bfb-9a9d-e1a01d4c659b")
@@ -2422,12 +2452,6 @@
 		(uuid "dd7a8a35-59cf-4ced-98d5-e057c311e165")
 	)
 	(junction
-		(at 85.09 73.66)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "eb1c757e-5b8f-44c8-8e72-142f7a5fd762")
-	)
-	(junction
 		(at 52.07 62.23)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2441,7 +2465,7 @@
 	)
 	(no_connect
 		(at 91.44 45.72)
-		(uuid "353b7a44-e72b-4114-a838-335bea7ad0ad")
+		(uuid "be49de6a-173f-4d35-a32d-2e9efecb23de")
 	)
 	(wire
 		(pts
@@ -2482,16 +2506,6 @@
 			(type default)
 		)
 		(uuid "161f8b3d-1ab2-4cd7-8db4-00e6d516ff66")
-	)
-	(wire
-		(pts
-			(xy 82.55 73.66) (xy 85.09 73.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "169b7ec4-d665-4ccc-a5ca-547519dbea1c")
 	)
 	(wire
 		(pts
@@ -2585,7 +2599,7 @@
 	)
 	(wire
 		(pts
-			(xy 62.23 48.26) (xy 68.58 48.26)
+			(xy 59.69 48.26) (xy 66.04 48.26)
 		)
 		(stroke
 			(width 0)
@@ -2625,13 +2639,13 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 72.39) (xy 85.09 73.66)
+			(xy 91.44 48.26) (xy 91.44 50.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8729defa-bc67-4cc6-8e86-193ecb224ecf")
+		(uuid "73c1952e-28f7-4559-8f4c-b83b82a762b3")
 	)
 	(wire
 		(pts
@@ -2675,7 +2689,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 48.26) (xy 72.39 48.26)
+			(xy 66.04 48.26) (xy 69.85 48.26)
 		)
 		(stroke
 			(width 0)
@@ -2735,7 +2749,7 @@
 	)
 	(wire
 		(pts
-			(xy 85.09 73.66) (xy 85.09 74.93)
+			(xy 85.09 72.39) (xy 85.09 74.93)
 		)
 		(stroke
 			(width 0)
@@ -2745,23 +2759,13 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 48.26) (xy 81.28 48.26)
+			(xy 77.47 48.26) (xy 78.74 48.26)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "c927a56c-55db-4ac9-aa07-13ca2d2be2b6")
-	)
-	(wire
-		(pts
-			(xy 91.44 48.26) (xy 91.44 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d9a29bcd-954d-49b8-9209-52536f994637")
 	)
 	(wire
 		(pts
@@ -2837,7 +2841,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm"
+		(property "Footprint" "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm"
 			(at 131.7752 69.85 0)
 			(hide yes)
 			(show_name no)
@@ -2870,6 +2874,116 @@
 				)
 			)
 		)
+		(property "MF" ""
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description_1" ""
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Package" ""
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Price" ""
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "SnapEDA_Link" ""
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MP" ""
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Availability" "Available"
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Check_Prices" "Rp1.000"
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" ""
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgSjnoWu/"
+			(at 130.81 66.04 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "1cb9816f-0af1-4e28-928f-67a7b0738110")
 		)
@@ -2887,7 +3001,7 @@
 	)
 	(symbol
 		(lib_id "power:PWR_FLAG")
-		(at 62.23 48.26 90)
+		(at 59.69 48.26 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2898,7 +3012,7 @@
 		(fields_autoplaced yes)
 		(uuid "086705f1-b9fa-48a4-929f-5a9c7eaf1d4b")
 		(property "Reference" "#FLG01"
-			(at 60.325 48.26 0)
+			(at 57.785 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2909,7 +3023,7 @@
 			)
 		)
 		(property "Value" "PWR_FLAG"
-			(at 58.42 48.2599 90)
+			(at 55.88 48.2599 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2920,7 +3034,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 62.23 48.26 0)
+			(at 59.69 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2931,7 +3045,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 62.23 48.26 0)
+			(at 59.69 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2942,7 +3056,7 @@
 			)
 		)
 		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 62.23 48.26 0)
+			(at 59.69 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3021,6 +3135,39 @@
 			)
 		)
 		(property "Description" "Polarized capacitor"
+			(at 35.56 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Availability" "Available"
+			(at 35.56 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Check_Prices" "Rp3.500"
+			(at 35.56 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgSjTVAv/"
 			(at 35.56 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -3255,7 +3402,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 113.03 62.23 0)
 			(hide yes)
 			(show_name no)
@@ -3266,7 +3413,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp20.000"
 			(at 113.03 62.23 0)
 			(hide yes)
 			(show_name no)
@@ -3315,6 +3462,219 @@
 		)
 	)
 	(symbol
+		(lib_id "SK12D07VG4:SK12D07VG4")
+		(at 83.82 48.26 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1d70baf0-7e19-4f85-a274-bf8c9f77a2e5")
+		(property "Reference" "U1"
+			(at 85.09 38.1 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SK12D07VG4"
+			(at 85.09 40.64 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Footprint:SK12D07VG4"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Datasheet" ""
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Switch Slide ON ON SPDT Side Slide 0.3A 30VDC PC Pins Bracket Mount/Through Hole Bulk"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MF" "C&K"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Package" "None"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Price" "None"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "SnapEDA_Link" "https://www.snapeda.com/parts/SK12D07VG4/C%2526K/view-part/?ref=snap"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MP" "SK12D07VG4"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Availability" "Not in stock"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Check_prices" "https://www.snapeda.com/parts/SK12D07VG4/C%2526K/view-part/?ref=eda"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Description_1" ""
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Check_Prices" "Rp.534"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" ""
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgSMd9s4/"
+			(at 83.82 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "COM"
+			(uuid "9c56b780-0c94-4857-be99-afbc1a3a0733")
+		)
+		(pin "1"
+			(uuid "0d3cb0b6-bea8-4d7b-96ee-b8f6ddda78ee")
+		)
+		(pin "2"
+			(uuid "38221a85-6a43-470e-b7a1-f48561f0e7dd")
+		)
+		(instances
+			(project "Despro2_But_SMD"
+				(path "/888e606d-62ca-412b-9b69-638c8c528506/7cefe5ff-f583-4fe7-bdce-edcba7d7a266"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R")
 		(at 149.86 77.47 0)
 		(unit 1)
@@ -3337,7 +3697,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "3300"
+		(property "Value" "3k3"
 			(at 152.4 78.7399 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3447,7 +3807,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 149.86 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -3458,7 +3818,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp3.125"
 			(at 149.86 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -3480,7 +3840,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgS6nPTt/"
 			(at 149.86 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -3728,6 +4088,116 @@
 				)
 			)
 		)
+		(property "MF" ""
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description_1" ""
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Package" ""
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Price" ""
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "SnapEDA_Link" ""
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MP" ""
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Availability" "Available"
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Check_Prices" "Rp15.893"
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MANUFACTURER_PART_NUMBER" ""
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgFDcTKQ/"
+			(at 85.09 64.77 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "5"
 			(uuid "ca37ba13-cc33-446e-8392-f9ccc93bfa4b")
 		)
@@ -3963,7 +4433,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 107.95 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -3974,7 +4444,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp1.185"
 			(at 107.95 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -3996,7 +4466,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgFUnuwp/"
 			(at 107.95 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -4173,85 +4643,6 @@
 			(project "Despro2_But_SMD"
 				(path "/888e606d-62ca-412b-9b69-638c8c528506/7cefe5ff-f583-4fe7-bdce-edcba7d7a266"
 					(reference "#PWR011")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 82.55 73.66 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "5974f06e-0532-449b-be24-e3be2f5d66a2")
-		(property "Reference" "#FLG02"
-			(at 80.645 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PWR_FLAG"
-			(at 78.74 73.6599 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 82.55 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 82.55 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 82.55 73.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "1e0edae1-c8dc-4fe2-a2ec-e47d617e2011")
-		)
-		(instances
-			(project "Despro2_But_SMD"
-				(path "/888e606d-62ca-412b-9b69-638c8c528506/7cefe5ff-f583-4fe7-bdce-edcba7d7a266"
-					(reference "#FLG02")
 					(unit 1)
 				)
 			)
@@ -4468,7 +4859,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 64.77 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -4479,7 +4870,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp6.000"
 			(at 64.77 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -4501,7 +4892,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgSjpeyP/"
 			(at 64.77 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -4607,90 +4998,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Switch:SW_Wuerth_450301014042")
-		(at 86.36 48.26 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "74a03e7b-3862-4639-b3c5-5cc5fea70fc6")
-		(property "Reference" "SW3"
-			(at 86.36 39.37 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SW_Wuerth_450301014042"
-			(at 86.614 37.338 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Button_Switch_THT:SW_Slide-03_Wuerth-WS-SLTV_10x2.5x6.4_P2.54mm"
-			(at 86.36 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.we-online.com/components/products/datasheet/450301014042.pdf"
-			(at 86.36 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Switch slide, single pole double throw"
-			(at 86.36 48.26 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "3"
-			(uuid "cafd5022-2773-46a2-9657-9a3177193c21")
-		)
-		(pin "1"
-			(uuid "7aee6ef9-4407-41e1-a139-a6f23c06e4e5")
-		)
-		(pin "2"
-			(uuid "e1ae249f-4559-414d-8ab4-1e935a27c0e5")
-		)
-		(instances
-			(project "Despro2_But_SMD"
-				(path "/888e606d-62ca-412b-9b69-638c8c528506/7cefe5ff-f583-4fe7-bdce-edcba7d7a266"
-					(reference "SW3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+24V")
-		(at 68.58 48.26 0)
+		(at 66.04 48.26 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4701,7 +5010,7 @@
 		(fields_autoplaced yes)
 		(uuid "79f0e432-9450-4476-a0ff-86f1fcdf7813")
 		(property "Reference" "#PWR019"
-			(at 68.58 52.07 0)
+			(at 66.04 52.07 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4712,7 +5021,7 @@
 			)
 		)
 		(property "Value" "+24V"
-			(at 68.58 43.18 0)
+			(at 66.04 43.18 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4722,7 +5031,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 68.58 48.26 0)
+			(at 66.04 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4733,7 +5042,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 68.58 48.26 0)
+			(at 66.04 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4744,7 +5053,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+24V\""
-			(at 68.58 48.26 0)
+			(at 66.04 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4899,7 +5208,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 119.38 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -4910,7 +5219,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp6.000"
 			(at 119.38 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -4932,7 +5241,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgSjpeyP/"
 			(at 119.38 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -4990,7 +5299,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Fuse:Fuse_1206_3216Metric_Pad1.42x1.75mm_HandSolder"
+		(property "Footprint" "Fuse:Fuseholder_Littelfuse_Nano2_154x"
 			(at 97.79 46.482 90)
 			(hide yes)
 			(show_name no)
@@ -5089,7 +5398,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 97.79 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -5100,7 +5409,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp6.500"
 			(at 97.79 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -5122,7 +5431,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" "https://tk.tokopedia.com/ZSbtKfygx/"
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgFPJfgU/"
 			(at 97.79 48.26 0)
 			(hide yes)
 			(show_name no)
@@ -5392,7 +5701,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 106.68 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -5403,7 +5712,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp6.065"
 			(at 106.68 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -5425,7 +5734,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgS6D3d4/"
 			(at 106.68 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -5584,7 +5893,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 52.07 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -5595,7 +5904,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp6.000"
 			(at 52.07 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -5617,7 +5926,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgSjpeyP/"
 			(at 52.07 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -5723,7 +6032,7 @@
 	)
 	(symbol
 		(lib_id "Diode:SS34")
-		(at 76.2 48.26 0)
+		(at 73.66 48.26 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5734,7 +6043,7 @@
 		(fields_autoplaced yes)
 		(uuid "c102f5d7-d9d0-4f39-9f0f-e6c48448c914")
 		(property "Reference" "D2"
-			(at 75.8825 41.91 0)
+			(at 73.3425 41.91 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5744,7 +6053,7 @@
 			)
 		)
 		(property "Value" "SS34"
-			(at 75.8825 44.45 0)
+			(at 73.3425 44.45 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5754,7 +6063,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_SMA"
-			(at 76.2 52.705 0)
+			(at 73.66 52.705 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5765,7 +6074,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.vishay.com/docs/88751/ss32.pdf"
-			(at 76.2 48.26 0)
+			(at 73.66 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5776,7 +6085,40 @@
 			)
 		)
 		(property "Description" "40V 3A Schottky Diode, SMA"
-			(at 76.2 48.26 0)
+			(at 73.66 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Availability" "Available"
+			(at 73.66 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Check_Prices" "Rp5.000"
+			(at 73.66 48.26 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgS6hLxN/"
+			(at 73.66 48.26 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5934,7 +6276,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 149.86 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -5945,7 +6287,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp10.360"
 			(at 149.86 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -5967,7 +6309,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgS6UYSR/"
 			(at 149.86 67.31 0)
 			(hide yes)
 			(show_name no)
