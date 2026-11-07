@@ -35,14 +35,21 @@ Run commands from the `Firmware/` directory (or pass `-d Firmware` from the repo
    pio run -e esp32doit-devkit-v1-gps-sim -t upload -t monitor
    ```
 
-3. **`esp32doit-devkit-v1-legacy` (Original Firmware Mode)**
+3. **`esp32doit-devkit-v1-ble` (Physical ESP32 — Wireless BLE GATT Telemetry to Flutter App)**
+   Enables the ESP32 BLE GATT Server (`-DENABLE_BLE=1` in [`src/ble_telemetry.h`](./src/ble_telemetry.h), advertising as `OtoCPR Unit 01`) and streams every 200 ms 14-column CSV telemetry row wirelessly over BLE notifications (`Service UUID: 4FAFC201-1FB5-459E-8FCC-C5C9C331914B`, `TX Characteristic UUID: BEB5483E-36E1-4688-B7F5-EA07361B26A8`).
+
+   ```powershell
+   pio run -e esp32doit-devkit-v1-ble -t upload -t monitor
+   ```
+
+4. **`esp32doit-devkit-v1-legacy` (Original Firmware Mode)**
    Compiles with `-DENABLE_GPS=0` for the exact pre-GPS CSV header and 4-line LCD behavior.
 
    ```powershell
    pio run -e esp32doit-devkit-v1-legacy
    ```
 
-4. **`native` (Desktop Host NMEA Simulation & Unit Tests)**
+5. **`native` (Desktop Host NMEA Simulation & Unit Tests)**
    Runs the C99 NEO-6M NMEA simulation engine and checksum/trajectory test suite natively on your computer.
    ```powershell
    pio test -e native
@@ -71,6 +78,18 @@ Run commands from the `Firmware/` directory (or pass `-d Firmware` from the repo
   ```powershell
   python log_serial.py --port COM3
   ```
+
+## Connecting Live Telemetry to the Flutter App (Wokwi TCP & Wireless BLE)
+
+Both the Wokwi simulation and the physical wireless ESP32 stream the **exact same 14-column CSV telemetry line** into [`TelemetryRepository.ingestFirmwareCsvLine()`](../lib/services/telemetry_repository.dart):
+
+- **During Wokwi Simulation (No Hardware Required):**
+  1. Start the Wokwi simulation in VS Code (`rfc2217ServerPort = 4000` in [`wokwi.toml`](./wokwi.toml) opens `127.0.0.1:4000`).
+  2. Run the Flutter app (`flutter run -d windows` or `flutter run -d android` — Android Emulator automatically falls back to `10.0.2.2:4000`).
+  3. In the Flutter app's **Robotic System** card, tap the `⋮` menu -> **Connect Wokwi Simulator (:4000)** (or open **Scan for New Device** and pair **OtoCPR Wokwi Simulator**).
+- **On Real Physical ESP32 Hardware (100% Wireless via BLE):**
+  1. Flash `pio run -e esp32doit-devkit-v1-ble -t upload`.
+  2. Pass the BLE notification stream (`Characteristic UUID: BEB5483E-36E1-4688-B7F5-EA07361B26A8`) to `TelemetryRepository.instance.attachBleCharacteristicStream(stream)` — zero changes to the CSV parser, UI, or database models.
 
 ## Rebuilding the Custom Wokwi GPS Chip (`chips/gps-neo6m.chip.wasm`)
 

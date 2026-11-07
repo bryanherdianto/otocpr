@@ -113,6 +113,7 @@ class _TelemetryHomeScreenState extends State<TelemetryHomeScreen> {
                             repo.esp32Notifier,
                             repo.locationNotifier,
                             repo.connectionStatusNotifier,
+                            repo.telemetrySourceNotifier,
                           ]),
                           builder: (context, _) {
                             final esp = repo.esp32;
@@ -125,6 +126,12 @@ class _TelemetryHomeScreenState extends State<TelemetryHomeScreen> {
                               children: [
                                 // Section: Controller Electronics
                                 _buildDiagSectionHeader('CONTROLLER & BLE HARDWARE'),
+                                _buildDiagTile(
+                                  label: 'Telemetry Transport',
+                                  value: repo.telemetrySource,
+                                  valueColor: repo.isExternalStreamActive ? AppColors.cyan : AppColors.white,
+                                  isMonospace: true,
+                                ),
                                 _buildDiagTile(
                                   label: 'Carrier Board',
                                   value: 'ESP32-C3 RISC-V Actuator Hub',
@@ -906,9 +913,27 @@ class _TelemetryHomeScreenState extends State<TelemetryHomeScreen> {
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
                         ),
-                        onSelected: (value) {
+                        onSelected: (value) async {
                           if (value == 'discovery') {
                             _showBleDiscoveryModal(context);
+                          } else if (value == 'connect_wokwi') {
+                            if (repo.isWokwiConnected) {
+                              await repo.disconnectWokwi();
+                            } else {
+                              final ok = await repo.connectToWokwi();
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      ok
+                                          ? 'Connected to Wokwi Simulator (TCP :4000)'
+                                          : 'Could not reach Wokwi on :4000 — start Wokwi simulation in VS Code first',
+                                    ),
+                                    duration: const Duration(seconds: 3),
+                                  ),
+                                );
+                              }
+                            }
                           } else if (value == 'unpair') {
                             repo.unpairDevice();
                           } else if (value == 'test_timeout') {
@@ -923,6 +948,25 @@ class _TelemetryHomeScreenState extends State<TelemetryHomeScreen> {
                                 const Icon(Icons.bluetooth_searching_rounded, size: 16, color: AppColors.cyan),
                                 const SizedBox(width: 10),
                                 Text('Scan for New Device', style: AppTypography.sans(fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 'connect_wokwi',
+                            child: Row(
+                              children: [
+                                Icon(
+                                  repo.isWokwiConnected ? Icons.cable_rounded : Icons.memory_rounded,
+                                  size: 16,
+                                  color: AppColors.cyan,
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  repo.isWokwiConnected
+                                      ? 'Disconnect Wokwi Stream'
+                                      : 'Connect Wokwi Simulator (:4000)',
+                                  style: AppTypography.sans(fontSize: 12),
+                                ),
                               ],
                             ),
                           ),
