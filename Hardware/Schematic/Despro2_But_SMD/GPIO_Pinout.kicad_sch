@@ -1293,6 +1293,121 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "power:PWR_FLAG"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(text "RESET"
 		(exclude_from_sim no)
@@ -1316,6 +1431,22 @@
 		(color 0 0 0 0)
 		(uuid "661cb4b0-f7ac-4a41-b32f-097f0ab9df8a")
 	)
+	(junction
+		(at 58.42 44.45)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d3001350-5b77-492c-9886-9bea768ad0f4")
+	)
+	(wire
+		(pts
+			(xy 55.88 44.45) (xy 58.42 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0e0be771-6f95-4e9c-a729-9dea62831cf2")
+	)
 	(wire
 		(pts
 			(xy 95.25 68.58) (xy 100.33 68.58)
@@ -1335,6 +1466,16 @@
 			(type default)
 		)
 		(uuid "5b73f007-29a4-464f-8e2c-73240631ab00")
+	)
+	(wire
+		(pts
+			(xy 58.42 44.45) (xy 62.23 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "641878e0-afa2-4e27-9652-31f75abb945d")
 	)
 	(wire
 		(pts
@@ -1506,7 +1647,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Molex:Molex_SL_171971-0002_1x02_P2.54mm_Vertical"
+		(property "Footprint" "Connector_Molex:Molex_KK-254_AE-6410-02A_1x02_P2.54mm_Vertical"
 			(at 67.31 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -1605,7 +1746,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 67.31 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -1616,7 +1757,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp10.000"
 			(at 67.31 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -1638,7 +1779,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgFDCtLN/"
 			(at 67.31 73.66 0)
 			(hide yes)
 			(show_name no)
@@ -1899,6 +2040,84 @@
 		)
 	)
 	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 58.42 44.45 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "6114758b-f02a-4268-9b06-d2ba2a191e03")
+		(property "Reference" "#FLG03"
+			(at 58.42 42.545 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 58.42 39.37 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 58.42 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 58.42 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Special symbol for telling ERC where power comes from"
+			(at 58.42 44.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "24b2aab3-e614-44cc-a94f-884d2f92c8bd")
+		)
+		(instances
+			(project "Despro2_But_SMD"
+				(path "/888e606d-62ca-412b-9b69-638c8c528506/0d4f9158-ea35-4a27-b8e5-4b048d7c9d3a"
+					(reference "#FLG03")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Switch:SW_SPST")
 		(at 95.25 63.5 90)
 		(unit 1)
@@ -1997,7 +2216,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" "any 6x6 switch button is fine"
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgFUMyeB/"
 			(at 95.25 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -2043,6 +2262,72 @@
 		)
 		(property "S" ""
 			(at 95.25 63.5 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Package" ""
+			(at 95.25 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Price" "Rp500"
+			(at 95.25 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "SnapEDA_Link" ""
+			(at 95.25 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "MP" ""
+			(at 95.25 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Availability" "Available"
+			(at 95.25 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Check_Prices" "Rp500"
+			(at 95.25 63.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2245,7 +2530,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgS6UYSR/"
 			(at 100.33 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -2344,7 +2629,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 100.33 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -2355,7 +2640,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp10.360"
 			(at 100.33 52.07 0)
 			(hide yes)
 			(show_name no)
@@ -2415,7 +2700,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Molex:Molex_SL_171971-0004_1x04_P2.54mm_Vertical"
+		(property "Footprint" "Connector_Molex:Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical"
 			(at 67.31 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -2514,7 +2799,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 67.31 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -2525,7 +2810,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp12.000"
 			(at 67.31 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -2547,7 +2832,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgFDVvv5/"
 			(at 67.31 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -2581,7 +2866,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 62.23 44.45 270)
+		(at 55.88 44.45 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2592,7 +2877,7 @@
 		(fields_autoplaced yes)
 		(uuid "aa8d48e5-d2d8-4a13-89a5-9ee7fbef1393")
 		(property "Reference" "#PWR01"
-			(at 55.88 44.45 0)
+			(at 49.53 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2603,7 +2888,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 58.42 44.4499 90)
+			(at 52.07 44.4499 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2614,7 +2899,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 62.23 44.45 0)
+			(at 55.88 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2625,7 +2910,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 62.23 44.45 0)
+			(at 55.88 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2636,7 +2921,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 62.23 44.45 0)
+			(at 55.88 44.45 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2771,7 +3056,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Molex:Molex_SL_171971-0004_1x04_P2.54mm_Vertical"
+		(property "Footprint" "Connector_Molex:Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical"
 			(at 67.31 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -2870,7 +3155,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 67.31 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -2881,7 +3166,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp12.000"
 			(at 67.31 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -2903,7 +3188,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" ""
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgFDVvv5/"
 			(at 67.31 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -3036,7 +3321,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10u"
+		(property "Value" "10uF"
 			(at 107.95 64.516 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3069,7 +3354,7 @@
 				)
 			)
 		)
-		(property "Description" "10 µF ±10% 25V Ceramic Capacitor X5R 0603 (1608 Metric)"
+		(property "Description" "Unpolarized capacitor"
 			(at 105.41 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -3124,7 +3409,7 @@
 				)
 			)
 		)
-		(property "Link to Buy" "https://www.pteamtech.com/product/NjYwNjA5MA/GRM188D71A106KA73D"
+		(property "Link to Buy" "https://tk.tokopedia.com/ZSgS6YVb9/"
 			(at 105.41 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -3212,7 +3497,7 @@
 				)
 			)
 		)
-		(property "Availability" ""
+		(property "Availability" "Available"
 			(at 105.41 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -3223,7 +3508,7 @@
 				)
 			)
 		)
-		(property "Check_Prices" ""
+		(property "Check_Prices" "Rp7.430"
 			(at 105.41 63.5 0)
 			(hide yes)
 			(show_name no)

@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 1.0,
-          "height": 1.8,
-          "width": 1.8
+          "drill": 0.0,
+          "height": 5.25,
+          "width": 4.55
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -63,7 +63,7 @@
           "min_clearance": 0.5,
           "min_island_area": 10.0,
           "min_thickness": 0.25,
-          "pad_connection": 1,
+          "pad_connection": 2,
           "remove_islands": 0,
           "thermal_relief_gap": 0.5,
           "thermal_relief_spoke_width": 0.5
@@ -76,7 +76,24 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "net_conflict|53750000|137100000|7112ec00-1176-4f3d-995e-aa1aa80ed314|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "net_conflict|53750000|137100000|8c75af42-9563-4a9a-b1f7-9a7c551ee8a0|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_over_copper|53750000|132700000|db91afce-8035-40d2-8e9e-db02a3c0d270|7112ec00-1176-4f3d-995e-aa1aa80ed314",
+          ""
+        ],
+        [
+          "silk_over_copper|53750000|141500000|806a6a5a-d4e4-43d9-8163-484eb36ff2ee|8c75af42-9563-4a9a-b1f7-9a7c551ee8a0",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -154,7 +171,7 @@
         "min_hole_to_hole": 0.25,
         "min_microvia_diameter": 0.2,
         "min_microvia_drill": 0.1,
-        "min_resolved_spokes": 2,
+        "min_resolved_spokes": 1,
         "min_silk_clearance": 0.0,
         "min_text_height": 0.8,
         "min_text_thickness": 0.08,
@@ -210,7 +227,11 @@
         }
       ],
       "track_widths": [
-        0.0
+        0.0,
+        0.2,
+        0.25,
+        0.8,
+        1.3
       ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
@@ -242,6 +263,10 @@
         {
           "diameter": 0.0,
           "drill": 0.0
+        },
+        {
+          "diameter": 0.8,
+          "drill": 0.4
         }
       ],
       "zones_allow_external_fillets": false
@@ -625,7 +650,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "Manufacture/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
@@ -663,6 +688,12 @@
         },
         {
           "group_by": false,
+          "label": "Link to Buy",
+          "name": "Link to Buy",
+          "show": true
+        },
+        {
+          "group_by": false,
           "label": "Qty",
           "name": "${QUANTITY}",
           "show": true
@@ -671,6 +702,24 @@
           "group_by": true,
           "label": "Value",
           "name": "Value",
+          "show": true
+        },
+        {
+          "group_by": true,
+          "label": "Footprint",
+          "name": "Footprint",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Check_Prices",
+          "name": "Check_Prices",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Availability",
+          "name": "Availability",
           "show": true
         },
         {
@@ -692,24 +741,120 @@
           "show": true
         },
         {
-          "group_by": true,
-          "label": "Footprint",
-          "name": "Footprint",
-          "show": true
-        },
-        {
           "group_by": false,
           "label": "Datasheet",
           "name": "Datasheet",
           "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Description_1",
+          "name": "Description_1",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "LCSC Part",
+          "name": "LCSC Part",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "MANUFACTURER_PART_NUMBER",
+          "name": "MANUFACTURER_PART_NUMBER",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MF",
+          "name": "MF",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MF Part Number",
+          "name": "MF Part Number",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MF_Part_Number",
+          "name": "MF_Part_Number",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MP",
+          "name": "MP",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "MPN",
+          "name": "MPN",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacture",
+          "name": "Manufacture",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer",
+          "name": "Manufacturer",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Package",
+          "name": "Package",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Price",
+          "name": "Price",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "S",
+          "name": "S",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "SnapEDA_Link",
+          "name": "SnapEDA_Link",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Description",
+          "name": "Description",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "#",
+          "name": "${ITEM_NUMBER}",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Check_prices",
+          "name": "Check_prices",
+          "show": false
         }
       ],
       "filter_string": "",
       "group_symbols": true,
       "include_excluded_from_bom": true,
-      "name": "Default Editing",
+      "name": "",
       "sort_asc": true,
-      "sort_field": "Reference"
+      "sort_field": "Value"
     },
     "bus_aliases": {},
     "connection_grid_size": 50.0,
@@ -760,7 +905,7 @@
         "uuid": "888e606d-62ca-412b-9b69-638c8c528506"
       }
     ],
-    "used_designators": "U1,U3,D1-21,#PWR1-7,#PWR21-22,#PWR24-27,#PWR44-45,#PWR146-149,Q1-2,#FLG3-4,R7-10,R18,J1-3,J5,J8-10,J22,TP1-4,H3-6,C20,SW2-3",
+    "used_designators": "U1,U3,U5,D1-21,#PWR1-7,#PWR16-17,#PWR21-32,#PWR44-45,#PWR146-153,Q1-2,#FLG2-6,R7-10,R18,J1-3,J5,J8-12,J22,TP1-4,H3-10,C20,SW2-3",
     "variants": []
   },
   "sheets": [
@@ -782,7 +927,7 @@
     ],
     [
       "dfb8ff18-6c2b-46fd-910c-17324d88f30c",
-      "Motor Driver"
+      "Input Actuactor"
     ]
   ],
   "text_variables": {},

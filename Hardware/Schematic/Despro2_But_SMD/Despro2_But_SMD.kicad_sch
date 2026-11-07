@@ -27,16 +27,6 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 53.34) (xy 134.62 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "206d1277-bc9a-4614-95a2-22258befb669")
-	)
-	(wire
-		(pts
 			(xy 128.27 41.91) (xy 134.62 41.91)
 		)
 		(stroke
@@ -64,16 +54,6 @@
 			(type default)
 		)
 		(uuid "6453f843-b627-4073-9170-1d1c3d1f5a38")
-	)
-	(wire
-		(pts
-			(xy 128.27 48.26) (xy 134.62 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "77423805-7f3e-426f-867c-44156bbb7d02")
 	)
 	(wire
 		(pts
@@ -134,16 +114,6 @@
 			(type default)
 		)
 		(uuid "c654b050-7b2a-4022-9d5a-32a9358f07e6")
-	)
-	(wire
-		(pts
-			(xy 128.27 50.8) (xy 134.62 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ee6c971e-cb8e-427c-bc14-1d5c6e3a9ced")
 	)
 	(sheet
 		(at 134.62 67.31)
@@ -311,7 +281,7 @@
 			(color 0 0 0 0)
 		)
 		(uuid "dfb8ff18-6c2b-46fd-910c-17324d88f30c")
-		(property "Sheetname" "Motor Driver"
+		(property "Sheetname" "Input Actuactor"
 			(at 134.62 34.8484 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -331,36 +301,6 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
-			)
-		)
-		(pin "EnA" input
-			(at 134.62 53.34 180)
-			(uuid "33927fc9-52fc-4173-abb0-55031432dc1e")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "IN1" input
-			(at 134.62 48.26 180)
-			(uuid "f617d1a5-8315-4458-a14c-89be434a1867")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "IN2" input
-			(at 134.62 50.8 180)
-			(uuid "1798a172-4f1f-4217-a09f-48892bc7b438")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
 			)
 		)
 		(pin "LC_DATA" input
@@ -459,7 +399,7 @@
 				)
 			)
 		)
-		(pin "GPIO0" input
+		(pin "GPIO18" input
 			(at 128.27 41.91 0)
 			(uuid "e41a4145-dfcb-4bb0-b575-23cc7db6d7a9")
 			(effects
@@ -469,7 +409,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO1" input
+		(pin "GPIO19" input
 			(at 128.27 44.45 0)
 			(uuid "7e3689d8-85c0-448d-9d3b-b39d2d9dc374")
 			(effects
@@ -479,7 +419,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO10" input
+		(pin "GPIO33" input
 			(at 128.27 59.69 0)
 			(uuid "8df97c6c-a066-4d53-a1cc-c8a655ef71e7")
 			(effects
@@ -489,37 +429,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO2" input
-			(at 128.27 48.26 0)
-			(uuid "05ef279a-510e-44c8-b102-a841d9afb2f3")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "GPIO3" input
-			(at 128.27 50.8 0)
-			(uuid "e4bb1f06-57ba-4295-ba9d-632680f37418")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "GPIO4" input
-			(at 128.27 53.34 0)
-			(uuid "ac9aaeae-fdfd-4f32-aa3b-be4fbe360e22")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "GPIO5" input
+		(pin "GPIO32" input
 			(at 128.27 57.15 0)
 			(uuid "17c8e72e-d4c5-4286-8d2b-83713ddf0eb1")
 			(effects
@@ -529,7 +439,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO6" input
+		(pin "GPIO4" input
 			(at 128.27 71.12 0)
 			(uuid "d82c3c72-c3e2-4c0a-b9ad-83974a50d316")
 			(effects
@@ -539,7 +449,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO7" input
+		(pin "GPIO23" input
 			(at 128.27 73.66 0)
 			(uuid "99284d7f-d8c0-402b-bc38-929be69d02a1")
 			(effects
@@ -549,7 +459,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO8" input
+		(pin "GPIO21" input
 			(at 128.27 76.2 0)
 			(uuid "dc7e3dba-4108-41bc-81af-8e8a88e36581")
 			(effects
@@ -559,7 +469,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO9" input
+		(pin "GPIO22" input
 			(at 128.27 78.74 0)
 			(uuid "0f7dc365-4d41-4205-8d98-6981ee697f26")
 			(effects
@@ -569,7 +479,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO20" input
+		(pin "GPIO16" input
 			(at 128.27 81.28 0)
 			(uuid "78eaf058-2078-433c-a2de-9d3a5b697335")
 			(effects
@@ -579,7 +489,7 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO21" input
+		(pin "GPIO17" input
 			(at 128.27 83.82 0)
 			(uuid "95c839cf-8321-4842-bfb3-b621e4c03f63")
 			(effects
