@@ -479,9 +479,9 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO16" input
+		(pin "RX2" input
 			(at 128.27 81.28 0)
-			(uuid "78eaf058-2078-433c-a2de-9d3a5b697335")
+			(uuid "5b2aa067-3ab6-40f9-b79c-9fff5eae9d82")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -489,9 +489,9 @@
 				(justify right)
 			)
 		)
-		(pin "GPIO17" input
+		(pin "TX2" input
 			(at 128.27 83.82 0)
-			(uuid "95c839cf-8321-4842-bfb3-b621e4c03f63")
+			(uuid "b2626bc4-fac0-47ec-b03c-ca9305cd0e6b")
 			(effects
 				(font
 					(size 1.27 1.27)
