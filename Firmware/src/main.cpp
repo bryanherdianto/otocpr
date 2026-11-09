@@ -26,6 +26,14 @@
 #ifndef LCD_CYCLE_GPS
 #define LCD_CYCLE_GPS 1
 #endif
+#ifndef ENABLE_BLE
+#define ENABLE_BLE 0
+#endif
+
+#if ENABLE_BLE
+#include "ble_telemetry.h"
+OtoCprBleTelemetry bleTelemetry;
+#endif
 
 #if ENABLE_GPS
 #include "gps_neo6m.h"
@@ -166,6 +174,11 @@ void setup()
   gps.setEcho(&Serial);
 #endif
 #endif // ENABLE_GPS
+
+#if ENABLE_BLE
+  // Wireless BLE UART setup (for real ESP32 hardware -> Flutter app)
+  bleTelemetry.begin("OtoCPR Unit 01");
+#endif
 
   // Load Cell setup
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
@@ -314,6 +327,28 @@ void loop()
     Serial.print(utcBuf);
 #endif
     Serial.println();
+
+#if ENABLE_BLE
+    if (bleTelemetry.isConnected()) {
+      char bleLine[192];
+#if ENABLE_GPS
+      snprintf(bleLine, sizeof(bleLine),
+               "%lu,%d,%.2f,%d,%d,%.2f,%.2f,%d,%.6f,%.6f,%lu,%.2f,%.1f,%s
+",
+               millis(), motorSetSpeed, gearBoxoutputSpeedRPM, motorPWM,
+               rawEncoderCounts, rawFrequencyHz, loadCellValue,
+               gps.hasFix() ? 1 : 0, gps.latitude(), gps.longitude(),
+               (unsigned long)gps.satellites(), gps.speedKmph(),
+               gps.altitudeMeters(), utcBuf);
+#else
+      snprintf(bleLine, sizeof(bleLine), "%lu,%d,%.2f,%d,%d,%.2f,%.2f
+",
+               millis(), motorSetSpeed, gearBoxoutputSpeedRPM, motorPWM,
+               rawEncoderCounts, rawFrequencyHz, loadCellValue);
+#endif
+      bleTelemetry.notifyLine(bleLine);
+    }
+#endif
 
 #if ENABLE_GPS && GPS_HUMAN_LOG
     static unsigned long lastGpsPrintMs = 0;

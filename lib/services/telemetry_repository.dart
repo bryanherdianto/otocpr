@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../models/telemetry_models.dart';
+import 'wokwi_tcp_client.dart';
 
 /// Connection status states for the ESP32 carrier hub adhering to standard IoT recommendations
 enum Esp32ConnectionStatus {
@@ -22,15 +24,34 @@ enum Esp32ConnectionStatus {
 /// - Safety Fallback: 5-10s scan timeout with clear warning & [Scan for New Device] CTA
 class TelemetryRepository {
   TelemetryRepository._() {
+    _wokwiLineSub = _wokwiClient.lines.listen(ingestFirmwareCsvLine);
+    _wokwiStateSub = _wokwiClient.connectionState.listen((connected) {
+      if (connected) {
+        telemetrySourceNotifier.value =
+            'Wokwi RFC2217 (${_wokwiClient.endpoint})';
+      } else if (_bleLineSub == null) {
+        telemetrySourceNotifier.value = 'Internal Demo Sim';
+      }
+    });
     _startLiveSimulation();
   }
   static final TelemetryRepository instance = TelemetryRepository._();
 
   static const String otoCprServiceUuid = '4FAFC201-1FB5-459E-8FCC-C5C9C331914B';
+  static const String otoCprTxCharacteristicUuid =
+      'BEB5483E-36E1-4688-B7F5-EA07361B26A8';
+  static const String wokwiDeviceId = '127.0.0.1:4000';
 
   Timer? _liveStreamTimer;
   Timer? _handshakeTimer;
   final math.Random _random = math.Random();
+  final WokwiTcpClient _wokwiClient = WokwiTcpClient();
+  StreamSubscription<String>? _wokwiLineSub;
+  StreamSubscription<bool>? _wokwiStateSub;
+  StreamSubscription<String>? _bleLineSub;
+  double _lastAngleDeg = 142.5;
+  double _prevHeadingLat = -6.2088;
+  double _prevHeadingLon = 106.8456;
 
   // Reactive state notifiers
   final ValueNotifier<Esp32Telemetry> esp32Notifier = ValueNotifier(Esp32Telemetry.initial());
@@ -39,6 +60,8 @@ class TelemetryRepository {
   final ValueNotifier<List<TelemetryLogItem>> logsNotifier = ValueNotifier(_initialLogs);
   final ValueNotifier<Esp32ConnectionStatus> connectionStatusNotifier =
       ValueNotifier(Esp32ConnectionStatus.connected);
+  final ValueNotifier<String> telemetrySourceNotifier =
+      ValueNotifier<String>('Internal Demo Sim');
 
   // BLE Two-Phase State Notifiers
   final ValueNotifier<BleDeviceModel?> pairedDeviceNotifier = ValueNotifier<BleDeviceModel?>(
@@ -62,6 +85,10 @@ class TelemetryRepository {
   List<TelemetryLogItem> get logs => logsNotifier.value;
   Esp32ConnectionStatus get connectionStatus => connectionStatusNotifier.value;
   bool get isConnected => connectionStatus == Esp32ConnectionStatus.connected;
+  bool get isWokwiConnected => _wokwiClient.isConnected;
+  bool get isExternalStreamActive =>
+      _wokwiClient.isConnected || _bleLineSub != null;
+  String get telemetrySource => telemetrySourceNotifier.value;
   BleDeviceModel? get pairedDevice => pairedDeviceNotifier.value;
 
   // Mutation / Integration hooks
@@ -110,6 +137,210 @@ class TelemetryRepository {
   }
 
   // =========================================================================
+  // UNIFIED FIRMWARE CSV PARSER (WOKWI TCP :4000 & REAL ESP32 BLE NOTIFY)
+  // =========================================================================
+
+  /// Connects directly to the Wokwi Simulator RFC2217 TCP server (`127.0.0.1:4000`).
+  /// Returns `true` if the Wokwi simulation stream was reached.
+  Future<bool> connectToWokwi({
+    String host = '127.0.0.1',
+    int port = 4000,
+    bool selectAsPairedDevice = true,
+  }) async {
+    _handshakeTimer?.cancel();
+    connectionStatusNotifier.value = Esp32ConnectionStatus.searching;
+    connectionFeedbackNotifier.value =
+        'Connecting to Wokwi Simulator ($host:$port)...';
+
+    final ok = await _wokwiClient.connect(host: host, port: port);
+    if (!ok) {
+      connectionStatusNotifier.value = Esp32ConnectionStatus.timeout;
+      connectionFeedbackNotifier.value =
+          'Could not reach Wokwi on $host:$port. Start the Wokwi simulator in VS Code first.';
+      return false;
+    }
+
+    if (selectAsPairedDevice) {
+      pairedDeviceNotifier.value = const BleDeviceModel(
+        id: wokwiDeviceId,
+        name: 'OtoCPR Wokwi Simulator',
+        rssi: -38,
+        serviceUuid: otoCprServiceUuid,
+        isPaired: true,
+      );
+    }
+
+    connectionStatusNotifier.value = Esp32ConnectionStatus.connected;
+    connectionFeedbackNotifier.value =
+        'Connected (${_wokwiClient.endpoint})';
+    telemetrySourceNotifier.value =
+        'Wokwi RFC2217 (${_wokwiClient.endpoint})';
+    esp32Notifier.value = esp32.copyWith(
+      isConnected: true,
+      deviceStatus: 'Connected',
+      timestamp: DateTime.now(),
+    );
+    return true;
+  }
+
+  /// Disconnects the Wokwi TCP stream and reverts to internal demo or standby.
+  Future<void> disconnectWokwi({bool resumeDemoSim = true}) async {
+    await _wokwiClient.disconnect();
+    if (_bleLineSub == null) {
+      telemetrySourceNotifier.value = 'Internal Demo Sim';
+      if (resumeDemoSim && isConnected) {
+        _startLiveSimulation();
+      }
+    }
+  }
+
+  /// Attaches a real wireless BLE GATT Notification byte stream from the physical
+  /// ESP32 (`OtoCprBleTelemetry`, Characteristic UUID `BEB5483E-...`).
+  /// Feeds the exact same `ingestFirmwareCsvLine` parser used by Wokwi.
+  void attachBleCharacteristicStream(Stream<List<int>> rawBleStream) {
+    _bleLineSub?.cancel();
+    _wokwiClient.disconnect();
+    telemetrySourceNotifier.value =
+        'BLE GATT Notify ($otoCprTxCharacteristicUuid)';
+    _bleLineSub = rawBleStream
+        .transform(const Utf8Decoder(allowMalformed: true))
+        .transform(const LineSplitter())
+        .listen(
+          ingestFirmwareCsvLine,
+          onDone: () {
+            _bleLineSub = null;
+            telemetrySourceNotifier.value = 'Internal Demo Sim';
+          },
+        );
+  }
+
+  /// Detaches an active wireless BLE notification stream.
+  Future<void> detachBleCharacteristicStream() async {
+    await _bleLineSub?.cancel();
+    _bleLineSub = null;
+    if (!_wokwiClient.isConnected) {
+      telemetrySourceNotifier.value = 'Internal Demo Sim';
+    }
+  }
+
+  /// Parses a single CSV telemetry line emitted by `Firmware/src/main.cpp`:
+  /// `Time(ms),Set_RPM,Actual_RPM,PWM,Raw_Counts,Freq_Hz,LoadCell[,GPS_Fix,Latitude,Longitude,Satellites,Speed_kmh,Altitude_m,GPS_UTC]`
+  ///
+  /// Used identically by both Wokwi TCP (`:4000`) and wireless BLE notifications.
+  bool ingestFirmwareCsvLine(String rawLine) {
+    final line = rawLine.trim();
+    if (line.isEmpty ||
+        line.startsWith('Time(ms)') ||
+        line.startsWith('[') ||
+        line.startsWith(r'$')) {
+      return false;
+    }
+
+    final parts = line.split(',');
+    if (parts.length < 7) return false;
+
+    final timeMs = int.tryParse(parts[0].trim());
+    if (timeMs == null) return false;
+
+    final setRpm = double.tryParse(parts[1].trim()) ?? 100.0;
+    final actualRpm = double.tryParse(parts[2].trim()) ?? 0.0;
+    final pwm = int.tryParse(parts[3].trim()) ?? 0;
+    final rawCounts = int.tryParse(parts[4].trim()) ?? 0;
+    final loadCellRaw = double.tryParse(parts[6].trim()) ?? 0.0;
+
+    // If the user spins the encoder in Wokwi (or on real hardware), use actualRpm;
+    // otherwise when PWM is active in Wokwi without encoder clicks, reflect setRpm.
+    final effectiveRpm = actualRpm.abs() > 0.1
+        ? actualRpm.abs()
+        : (pwm > 0 ? setRpm.abs() : 0.0);
+
+    // Map HX711 reading into Newtons (baseline 68.5 N when scale is tared at 0.0 in Wokwi)
+    double forceN;
+    if (loadCellRaw.abs() < 0.01) {
+      forceN = 68.5;
+    } else if (loadCellRaw.abs() > 150.0) {
+      forceN = (loadCellRaw.abs() / 42.0).clamp(5.0, 120.0);
+    } else {
+      forceN = loadCellRaw.abs().clamp(5.0, 120.0);
+    }
+
+    final deltaDeg = rawCounts != 0
+        ? (rawCounts.abs() / (11.0 * 65.0)) * 360.0
+        : (effectiveRpm / 60.0) * 0.2 * 360.0;
+    final nextAngle = (_lastAngleDeg + deltaDeg) % 360.0;
+    final completedTurn = (_lastAngleDeg + deltaDeg) >= 360.0;
+    _lastAngleDeg = nextAngle;
+
+    final nextPeak = math.max(esp32.peakForce, forceN);
+    final nextCount =
+        esp32.compressionCount + (completedTurn ? 1 : 0);
+
+    esp32Notifier.value = esp32.copyWith(
+      instantForce: double.parse(forceN.toStringAsFixed(1)),
+      peakForce: double.parse(nextPeak.toStringAsFixed(1)),
+      positionAngle: double.parse(nextAngle.toStringAsFixed(1)),
+      motorSpeed: double.parse(effectiveRpm.toStringAsFixed(1)),
+      compressionRate: double.parse(effectiveRpm.toStringAsFixed(1)),
+      direction: actualRpm < -0.1 ? 'CCW' : 'CW',
+      compressionCount: nextCount,
+      recoilOk: forceN <= 95.0,
+      anomalyFlag: forceN > 95.0,
+      isConnected: true,
+      deviceStatus: 'Connected',
+      timestamp: DateTime.now(),
+    );
+
+    // Parse optional NEO-6M GPS columns (columns 7..13)
+    if (parts.length >= 13) {
+      final hasFix = parts[7].trim() == '1';
+      final lat = double.tryParse(parts[8].trim());
+      final lon = double.tryParse(parts[9].trim());
+      final sats = int.tryParse(parts[10].trim()) ?? 0;
+      final speedKmh = double.tryParse(parts[11].trim()) ?? 0.0;
+      final altM = double.tryParse(parts[12].trim()) ?? 0.0;
+
+      if (hasFix &&
+          lat != null &&
+          lon != null &&
+          (lat.abs() > 0.0001 || lon.abs() > 0.0001)) {
+        double heading = location.heading;
+        final dLat = lat - _prevHeadingLat;
+        final dLon = lon - _prevHeadingLon;
+        if (dLat.abs() > 1e-6 || dLon.abs() > 1e-6) {
+          heading = (math.atan2(dLon, dLat) * 180.0 / math.pi + 360.0) % 360.0;
+          _prevHeadingLat = lat;
+          _prevHeadingLon = lon;
+        }
+        final estHdop = sats > 0
+            ? double.parse((0.7 + 6.0 / sats).toStringAsFixed(2))
+            : 99.99;
+
+        updateGpsData(
+          latitude: lat,
+          longitude: lon,
+          altitude: altM,
+          speed: speedKmh,
+          heading: double.parse(heading.toStringAsFixed(1)),
+          hdop: estHdop,
+          satellites: sats,
+          isGpsLocked: true,
+          fixType: sats >= 4 ? '3D Fix (NEO-6M)' : '2D Fix (NEO-6M)',
+        );
+      } else {
+        updateGpsData(
+          latitude: location.latitude,
+          longitude: location.longitude,
+          satellites: sats,
+          isGpsLocked: false,
+          fixType: 'Acquiring ($sats sats)',
+        );
+      }
+    }
+
+    return true;
+  }
+
+  // =========================================================================
   // PHASE 1: FIRST-TIME SETUP (GUIDED DISCOVERY & FILTERED PICKER)
   // =========================================================================
 
@@ -125,6 +356,16 @@ class TelemetryRepository {
       if (!isScanningDiscoveryNotifier.value) return;
 
       final candidates = [
+        BleDeviceModel(
+          id: wokwiDeviceId,
+          name: pairedDevice?.id == wokwiDeviceId
+              ? (pairedDevice?.name ?? 'OtoCPR Wokwi Simulator')
+              : 'OtoCPR Wokwi Simulator',
+          rssi: -38, // Localhost TCP simulator bridge
+          serviceUuid: otoCprServiceUuid,
+          isPaired: pairedDevice?.id == wokwiDeviceId,
+          lastSeen: DateTime.now(),
+        ),
         BleDeviceModel(
           id: '24:DC:C3:A8:14:02',
           name: pairedDevice?.id == '24:DC:C3:A8:14:02'
@@ -226,6 +467,16 @@ class TelemetryRepository {
       return;
     }
 
+    // If the user selected the Wokwi Simulator device, connect directly to Wokwi TCP :4000
+    if (target.id == wokwiDeviceId) {
+      final ok = await connectToWokwi(selectAsPairedDevice: false);
+      if (!ok) {
+        // Fallback so UI still functions if user hasn't pressed Play in Wokwi yet
+        _startLiveSimulation();
+      }
+      return;
+    }
+
     // Step 2: Handshake - Connecting
     await Future.delayed(const Duration(milliseconds: 1100));
     if (connectionStatusNotifier.value != Esp32ConnectionStatus.searching) return;
@@ -233,12 +484,20 @@ class TelemetryRepository {
     connectionStatusNotifier.value = Esp32ConnectionStatus.connecting;
     connectionFeedbackNotifier.value = 'Connecting to ${target.name}...';
 
-    // Step 3: Connected
-    await Future.delayed(const Duration(milliseconds: 900));
+    // Step 3: Connected (also probe Wokwi :4000 automatically if running locally)
+    final wokwiReached = await _wokwiClient.connect();
+    if (!wokwiReached) {
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
     if (connectionStatusNotifier.value != Esp32ConnectionStatus.connecting) return;
 
     connectionStatusNotifier.value = Esp32ConnectionStatus.connected;
-    connectionFeedbackNotifier.value = 'Connected';
+    connectionFeedbackNotifier.value = wokwiReached
+        ? 'Connected (Wokwi Live Stream)'
+        : 'Connected';
+    telemetrySourceNotifier.value = wokwiReached
+        ? 'Wokwi RFC2217 (${_wokwiClient.endpoint})'
+        : 'Internal Demo Sim';
     esp32Notifier.value = esp32.copyWith(
       isConnected: true,
       deviceStatus: 'Connected',
@@ -249,7 +508,9 @@ class TelemetryRepository {
 
   void disconnectEsp32() {
     _handshakeTimer?.cancel();
+    _wokwiClient.disconnect();
     _stopLiveSimulation();
+    telemetrySourceNotifier.value = 'Disconnected';
     connectionStatusNotifier.value = Esp32ConnectionStatus.disconnected;
     connectionFeedbackNotifier.value = 'Disconnected';
     esp32Notifier.value = esp32.copyWith(
@@ -273,6 +534,10 @@ class TelemetryRepository {
     _liveStreamTimer = Timer.periodic(const Duration(milliseconds: 1500), (timer) {
       if (!isConnected) {
         timer.cancel();
+        return;
+      }
+      // When Wokwi TCP or Wireless BLE is actively streaming, do not overwrite with fake jitter
+      if (isExternalStreamActive) {
         return;
       }
 
@@ -308,6 +573,12 @@ class TelemetryRepository {
   void _stopLiveSimulation() {
     _liveStreamTimer?.cancel();
     _liveStreamTimer = null;
+  }
+
+  Future<void> disposeStreams() async {
+    await _wokwiLineSub?.cancel();
+    await _wokwiStateSub?.cancel();
+    await _bleLineSub?.cancel();
   }
 
   /// Provides dynamic historical metric series and statistics for any requested metric
