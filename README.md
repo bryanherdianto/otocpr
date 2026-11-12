@@ -65,7 +65,7 @@ Cardiopulmonary arrest in pediatric patients demands extreme precision. Accordin
 - **Chest Recoil**: Complete chest recoil between compressions without lingering residual force.
 
 <p align="center">
-  <img src="docs/images/cpr_comparison_lucas_vs_infant.jpg" alt="Adult Mechanical CPR vs Infant Manual CPR" width="85%" />
+  <img src="docs/cpr_comparison_lucas_vs_infant.jpg" alt="Adult Mechanical CPR vs Infant Manual CPR" width="85%" />
   <br />
   <em>Figure 1: Commercial adult mechanical CPR systems (e.g., LUCAS 3, left) versus delicate manual two-finger compression required for infants (right).</em>
 </p>
@@ -118,7 +118,7 @@ The electronics are consolidated onto a custom-designed **Printed Circuit Board 
 ### Custom PCB Characteristics
 
 <p align="center">
-  <img src="docs/images/pcb_characteristics_layout.png" alt="OtoCPR KiCad PCB Layout & Board Characteristics" width="92%" />
+  <img src="docs/pcb_characteristics_layout.png" alt="OtoCPR KiCad PCB Layout & Board Characteristics" width="92%" />
   <br />
   <em>Figure 2: 2D KiCad board layout, mechanical footprint, and board fabrication specifications (DESPRO 2026 Kelompok 20).</em>
 </p>
@@ -137,7 +137,7 @@ The electronics are consolidated onto a custom-designed **Printed Circuit Board 
 ### 3D Board Visualization
 
 <p align="center">
-  <img src="docs/images/pcb_3d_render.jpg" alt="OtoCPR 3D PCB Render" width="85%" />
+  <img src="docs/pcb_3d_render.jpg" alt="OtoCPR 3D PCB Render" width="85%" />
   <br />
   <em>Figure 3: 3D ray-traced rendering of the assembled OtoCPR control board showing screw terminals, ESP32 header sockets, power inductor, and decoupling capacitors.</em>
 </p>
