@@ -25,14 +25,19 @@ class _TelemetryDetailsScreenState extends State<TelemetryDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final history = TelemetryRepository.instance.getMetricHistory(
-      widget.title,
-      timeframeIndex: _selectedTimeframe,
-    );
-    final displayValue = widget.currentValue.isNotEmpty ? widget.currentValue : history.currentValue;
-    final displayUnit = widget.unit.isNotEmpty ? widget.unit : history.unit;
+    return ListenableBuilder(
+      listenable: TelemetryRepository.instance.esp32Notifier,
+      builder: (context, _) {
+        final history = TelemetryRepository.instance.getMetricHistory(
+          widget.title,
+          timeframeIndex: _selectedTimeframe,
+        );
+        final displayValue =
+            history.currentValue.isNotEmpty ? history.currentValue : widget.currentValue;
+        final displayUnit =
+            history.unit.isNotEmpty ? history.unit : widget.unit;
 
-    return Scaffold(
+        return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -252,6 +257,8 @@ class _TelemetryDetailsScreenState extends State<TelemetryDetailsScreen> {
         ),
       ),
     );
+      },
+    );
   }
 
   Widget _buildStat(String label, String value, String unit) {
@@ -304,11 +311,12 @@ class _TelemetryChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final barWidth = size.width / (data.length * 1.6);
-    final maxVal = 120.0;
+    final maxVal = data.fold<double>(120.0, (m, v) => v > m ? v : m);
+    final denom = data.length > 1 ? (data.length - 1) : 1;
 
     final path = Path();
     for (int i = 0; i < data.length; i++) {
-      final x = i * (size.width / (data.length - 1));
+      final x = data.length == 1 ? size.width / 2 : i * (size.width / denom);
       final barHeight = (data[i] / maxVal) * size.height;
       final y = size.height - barHeight;
 

@@ -32,6 +32,24 @@ void main() {
     expect(repo.location.speed, closeTo(18.4, 0.01));
     expect(repo.location.altitude, closeTo(12.5, 0.01));
 
+    expect(repo.logs.first.category, anyOf('ESP32', 'AI'));
+    expect(repo.logs.any((l) => l.name.startsWith('L0001_')), isTrue);
+    expect(repo.aiDiagnostics.classification, equals('Optimal Compression Dynamics'));
+    expect(repo.aiDiagnostics.rawJson, contains('"motor_rpm": 108.5'));
+
+    // Feed an out-of-range force (90 N > 80 N target max) and rate (90 RPM < 100 target min)
+    // to verify dynamic Mean Value and Efficiency (%) computation.
+    repo.ingestFirmwareCsvLine(
+      '4400,110.0,90.0,142,24,120.00,90.00,1,-6.208765,106.845612,9,18.40,12.5,2026-11-07 01:15:04',
+    );
+    final forceSeries = repo.getMetricHistory('Instantaneous Force', timeframeIndex: 0);
+    expect(forceSeries.meanValue, equals('77.6')); // (65.2 + 90.0) / 2
+    expect(forceSeries.efficiency, equals('50%')); // 1 of 2 samples in 50..80 N
+
+    final rateSeries = repo.getMetricHistory('Compression Rate', timeframeIndex: 0);
+    expect(rateSeries.meanValue, equals('99.3')); // (108.5 + 90.0) / 2
+    expect(rateSeries.efficiency, equals('50%')); // 1 of 2 samples in 100..120 CPM
+
     repo.disconnectEsp32();
     await repo.disposeStreams();
   });
