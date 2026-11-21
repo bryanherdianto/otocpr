@@ -144,10 +144,15 @@ class _TelemetryLogsScreenState extends State<TelemetryLogsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<List<TelemetryLogItem>>(
-      valueListenable: TelemetryRepository.instance.logsNotifier,
-      builder: (context, allLogs, _) {
-        final filteredLogs = _filterLogs(allLogs);
+    final repo = TelemetryRepository.instance;
+    return ListenableBuilder(
+      listenable: Listenable.merge([
+        repo.logsNotifier,
+        repo.persistedLogCountNotifier,
+      ]),
+      builder: (context, _) {
+        final filteredLogs = _filterLogs(repo.logs);
+        final savedCount = repo.persistedLogCount;
 
         return Scaffold(
           backgroundColor: AppColors.background,
@@ -171,17 +176,41 @@ class _TelemetryLogsScreenState extends State<TelemetryLogsScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.surfacePurple,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppColors.purple.withValues(alpha: 0.3)),
-                            ),
-                            child: Text(
-                              '${filteredLogs.length} Files',
-                              style: AppTypography.mono(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.white),
-                            ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (savedCount > 0) ...[
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.surfaceCard,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: AppColors.cyan.withValues(alpha: 0.35)),
+                                  ),
+                                  child: Text(
+                                    'Drift · $savedCount',
+                                    style: AppTypography.mono(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.cyan,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                              ],
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppColors.surfacePurple,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.purple.withValues(alpha: 0.3)),
+                                ),
+                                child: Text(
+                                  '${filteredLogs.length} Files',
+                                  style: AppTypography.mono(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.white),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -209,7 +238,41 @@ class _TelemetryLogsScreenState extends State<TelemetryLogsScreen> {
 
                 // High-density File Tree List (Driven by TelemetryRepository)
                 Expanded(
-                  child: ListView.separated(
+                  child: filteredLogs.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.storage_rounded,
+                                  size: 40,
+                                  color: AppColors.gray.withValues(alpha: 0.6),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  'No logs stored yet',
+                                  style: AppTypography.sans(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  'Connect Wokwi simulator to record telemetry logs',
+                                  textAlign: TextAlign.center,
+                                  style: AppTypography.sans(
+                                    fontSize: 12,
+                                    color: AppColors.gray,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: filteredLogs.length,
                     separatorBuilder: (context, index) => const SizedBox(height: 8),

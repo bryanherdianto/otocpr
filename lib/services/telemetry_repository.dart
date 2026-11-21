@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'package:drift/drift.dart' show Value;
 import 'package:flutter/foundation.dart';
+import '../database.dart';
 import '../models/telemetry_models.dart';
 import 'wokwi_tcp_client.dart';
 
@@ -29,8 +31,11 @@ class TelemetryRepository {
       if (connected) {
         telemetrySourceNotifier.value =
             'Wokwi RFC2217 (${_wokwiClient.endpoint})';
-      } else if (_bleLineSub == null) {
-        telemetrySourceNotifier.value = 'Internal Demo Sim';
+      } else {
+        if (_bleLineSub == null) {
+          telemetrySourceNotifier.value = 'Internal Demo Sim';
+        }
+        unawaited(_finalizeActiveSession());
       }
     });
     _startLiveSimulation();
@@ -44,11 +49,21 @@ class TelemetryRepository {
 
   Timer? _liveStreamTimer;
   Timer? _handshakeTimer;
+  Timer? _flushTimer;
   final math.Random _random = math.Random();
   final WokwiTcpClient _wokwiClient = WokwiTcpClient();
   StreamSubscription<String>? _wokwiLineSub;
   StreamSubscription<bool>? _wokwiStateSub;
   StreamSubscription<String>? _bleLineSub;
+  AppDatabase? _db;
+  final List<_PendingSampleRecord> _pendingSamples = [];
+  final List<_PendingLogRecord> _pendingLogs = [];
+  Future<void> _writeChain = Future<void>.value();
+  int? _activeSessionId;
+  int _activeSessionSampleCount = 0;
+  double _activeSessionMaxPeakForce = 0.0;
+  int _activeSessionTotalCompressions = 0;
+
   double _lastAngleDeg = 142.5;
   double _prevHeadingLat = -6.2088;
   double _prevHeadingLon = 106.8456;
@@ -59,7 +74,9 @@ class TelemetryRepository {
 
   static const int _maxHistorySamples = 4500; // ~15 min at 5 Hz
   static const int _maxChartPoints = 24;
-  static const int _maxLogEntries = 50;
+  static const int _maxLogEntries = 200;
+  static const int _sampleFlushBatchSize = 5;
+  static const Duration _flushDebounce = Duration(milliseconds: 500);
   List<_MetricSample>? _instantForceHistory;
   List<_MetricSample>? _peakForceHistory;
   List<_MetricSample>? _rateHistory;
@@ -87,6 +104,9 @@ class TelemetryRepository {
       ValueNotifier(Esp32ConnectionStatus.connected);
   final ValueNotifier<String> telemetrySourceNotifier =
       ValueNotifier<String>('Internal Demo Sim');
+  final ValueNotifier<int> persistedSampleCountNotifier = ValueNotifier<int>(0);
+  final ValueNotifier<int> persistedLogCountNotifier = ValueNotifier<int>(0);
+  final ValueNotifier<int> persistedSessionCountNotifier = ValueNotifier<int>(0);
 
   // BLE Two-Phase State Notifiers
   final ValueNotifier<BleDeviceModel?> pairedDeviceNotifier = ValueNotifier<BleDeviceModel?>(
@@ -113,6 +133,10 @@ class TelemetryRepository {
   bool get isWokwiConnected => _wokwiClient.isConnected;
   bool get isExternalStreamActive =>
       _wokwiClient.isConnected || _bleLineSub != null;
+  bool get hasDatabase => _db != null;
+  int get persistedSampleCount => persistedSampleCountNotifier.value;
+  int get persistedLogCount => persistedLogCountNotifier.value;
+  int get persistedSessionCount => persistedSessionCountNotifier.value;
   String get telemetrySource => telemetrySourceNotifier.value;
   BleDeviceModel? get pairedDevice => pairedDeviceNotifier.value;
 
@@ -175,6 +199,7 @@ class TelemetryRepository {
     int port = 4000,
     bool selectAsPairedDevice = true,
   }) async {
+    await _finalizeActiveSession();
     _handshakeTimer?.cancel();
     connectionStatusNotifier.value = Esp32ConnectionStatus.searching;
     connectionFeedbackNotifier.value =
@@ -214,6 +239,7 @@ class TelemetryRepository {
   /// Disconnects the Wokwi TCP stream and reverts to internal demo or standby.
   Future<void> disconnectWokwi({bool resumeDemoSim = true}) async {
     await _wokwiClient.disconnect();
+    await _finalizeActiveSession();
     if (_bleLineSub == null) {
       telemetrySourceNotifier.value = 'Internal Demo Sim';
       if (resumeDemoSim && isConnected) {
@@ -238,6 +264,7 @@ class TelemetryRepository {
           onDone: () {
             _bleLineSub = null;
             telemetrySourceNotifier.value = 'Internal Demo Sim';
+            unawaited(_finalizeActiveSession());
           },
         );
   }
@@ -246,6 +273,7 @@ class TelemetryRepository {
   Future<void> detachBleCharacteristicStream() async {
     await _bleLineSub?.cancel();
     _bleLineSub = null;
+    await _finalizeActiveSession();
     if (!_wokwiClient.isConnected) {
       telemetrySourceNotifier.value = 'Internal Demo Sim';
     }
@@ -270,10 +298,12 @@ class TelemetryRepository {
     final timeMs = int.tryParse(parts[0].trim());
     if (timeMs == null) return false;
 
+    final now = DateTime.now();
     final setRpm = double.tryParse(parts[1].trim()) ?? 100.0;
     final actualRpm = double.tryParse(parts[2].trim()) ?? 0.0;
     final pwm = int.tryParse(parts[3].trim()) ?? 0;
     final rawCounts = int.tryParse(parts[4].trim()) ?? 0;
+    final freqHz = double.tryParse(parts[5].trim()) ?? 0.0;
     final loadCellRaw = double.tryParse(parts[6].trim()) ?? 0.0;
 
     // If the user spins the encoder in Wokwi (or on real hardware), use actualRpm;
@@ -303,20 +333,38 @@ class TelemetryRepository {
     final nextCount =
         esp32.compressionCount + (completedTurn ? 1 : 0);
 
+    final roundedForce = double.parse(forceN.toStringAsFixed(1));
+    final roundedPeak = double.parse(nextPeak.toStringAsFixed(1));
+    final roundedAngle = double.parse(nextAngle.toStringAsFixed(1));
+    final roundedRpm = double.parse(effectiveRpm.toStringAsFixed(1));
+    final direction = actualRpm < -0.1 ? 'CCW' : 'CW';
+    final recoilOk = forceN <= 95.0;
+    final anomalyFlag = forceN > 95.0;
+
     esp32Notifier.value = esp32.copyWith(
-      instantForce: double.parse(forceN.toStringAsFixed(1)),
-      peakForce: double.parse(nextPeak.toStringAsFixed(1)),
-      positionAngle: double.parse(nextAngle.toStringAsFixed(1)),
-      motorSpeed: double.parse(effectiveRpm.toStringAsFixed(1)),
-      compressionRate: double.parse(effectiveRpm.toStringAsFixed(1)),
-      direction: actualRpm < -0.1 ? 'CCW' : 'CW',
+      instantForce: roundedForce,
+      peakForce: roundedPeak,
+      positionAngle: roundedAngle,
+      motorSpeed: roundedRpm,
+      compressionRate: roundedRpm,
+      direction: direction,
       compressionCount: nextCount,
-      recoilOk: forceN <= 95.0,
-      anomalyFlag: forceN > 95.0,
+      recoilOk: recoilOk,
+      anomalyFlag: anomalyFlag,
       isConnected: true,
       deviceStatus: 'Connected',
-      timestamp: DateTime.now(),
+      timestamp: now,
     );
+
+    bool parsedGpsFix = false;
+    double? parsedLat;
+    double? parsedLon;
+    int? parsedSats;
+    double? parsedSpeedKmh;
+    double? parsedAltM;
+    final parsedGpsUtc = parts.length >= 14 && parts[13].trim().isNotEmpty
+        ? parts[13].trim()
+        : null;
 
     // Parse optional NEO-6M GPS columns (columns 7..13)
     if (parts.length >= 13) {
@@ -327,10 +375,18 @@ class TelemetryRepository {
       final speedKmh = double.tryParse(parts[11].trim()) ?? 0.0;
       final altM = double.tryParse(parts[12].trim()) ?? 0.0;
 
+      parsedSats = sats;
+      parsedSpeedKmh = speedKmh;
+      parsedAltM = altM;
+
       if (hasFix &&
           lat != null &&
           lon != null &&
           (lat.abs() > 0.0001 || lon.abs() > 0.0001)) {
+        parsedGpsFix = true;
+        parsedLat = lat;
+        parsedLon = lon;
+
         double heading = location.heading;
         final dLat = lat - _prevHeadingLat;
         final dLon = lon - _prevHeadingLon;
@@ -365,7 +421,40 @@ class TelemetryRepository {
       }
     }
 
+    if (_db != null) {
+      _pendingSamples.add(
+        _PendingSampleRecord(
+          recordedAt: now,
+          source: telemetrySource,
+          firmwareTimeMs: timeMs,
+          setRpm: setRpm,
+          actualRpm: roundedRpm,
+          pwm: pwm,
+          rawCounts: rawCounts,
+          freqHz: freqHz,
+          loadCellRaw: loadCellRaw,
+          instantForce: roundedForce,
+          peakForce: roundedPeak,
+          positionAngle: roundedAngle,
+          direction: direction,
+          compressionCount: nextCount,
+          compressionDepth: esp32.compressionDepth,
+          motorTemp: esp32.motorTemp,
+          recoilOk: recoilOk,
+          anomalyFlag: anomalyFlag,
+          gpsFix: parsedGpsFix,
+          latitude: parsedLat,
+          longitude: parsedLon,
+          satellites: parsedSats,
+          speedKmh: parsedSpeedKmh,
+          altitudeM: parsedAltM,
+          gpsUtc: parsedGpsUtc,
+        ),
+      );
+    }
+
     _recordLiveSampleAndLogs(
+      now: now,
       timeMs: timeMs,
       setRpm: setRpm,
       actualRpm: effectiveRpm,
@@ -376,6 +465,12 @@ class TelemetryRepository {
       angleDeg: nextAngle,
       compressionCount: nextCount,
     );
+
+    if (_db != null) {
+      _scheduleFlush(
+        immediate: _pendingSamples.length >= _sampleFlushBatchSize,
+      );
+    }
 
     return true;
   }
@@ -391,32 +486,13 @@ class TelemetryRepository {
     }
   }
 
-  void _recordLiveSampleAndLogs({
-    required int timeMs,
-    required double setRpm,
-    required double actualRpm,
-    required int pwm,
-    required int rawCounts,
+  _AiSummaryResult _computeAiSummary({
     required double forceN,
-    required double peakForceN,
-    required double angleDeg,
-    required int compressionCount,
+    required double actualRpm,
+    required double setRpm,
+    required bool isGpsLocked,
+    String subtitlePrefix = 'Live',
   }) {
-    final now = DateTime.now();
-    _pushHistorySample(_instantForceHist, now, forceN);
-    _pushHistorySample(_peakForceHist, now, peakForceN);
-    _pushHistorySample(_rateHist, now, actualRpm);
-    _pushHistorySample(_angleHist, now, angleDeg);
-    _pushHistorySample(_countHist, now, compressionCount.toDouble());
-    _pushHistorySample(_depthHist, now, esp32.compressionDepth);
-    _pushHistorySample(_tempHist, now, esp32.motorTemp);
-    _pushHistorySample(
-      _directionHist,
-      now,
-      esp32.direction == 'CW' ? 1.0 : 0.0,
-    );
-
-    final loc = location;
     final isOverForce = forceN > 95.0;
     final isRateOk = actualRpm >= 100.0 && actualRpm <= 120.0;
     final isIdle = actualRpm <= 0.1;
@@ -459,12 +535,59 @@ class TelemetryRepository {
         ? 0.0
         : double.parse((98.0 * (actualRpm / 108.0).clamp(0.7, 1.2)).toStringAsFixed(0));
 
+    return _AiSummaryResult(
+      classification: classification,
+      guidelineSubtitle:
+          '$subtitlePrefix ${actualRpm.toStringAsFixed(0)} CPM · Force ${forceN.toStringAsFixed(1)} N · ${isGpsLocked ? 'GPS Locked' : 'GPS Acquiring'}',
+      insight: insight,
+      confidence: isOverForce ? 96.2 : 98.4,
+      tidalVolume: tidalVolume,
+      recoilResidual: recoilResidual,
+      fatigueDrift: fatigueDrift,
+      sessionHealthIndex: healthScore,
+    );
+  }
+
+  void _recordLiveSampleAndLogs({
+    required DateTime now,
+    required int timeMs,
+    required double setRpm,
+    required double actualRpm,
+    required int pwm,
+    required int rawCounts,
+    required double forceN,
+    required double peakForceN,
+    required double angleDeg,
+    required int compressionCount,
+  }) {
+    _pushHistorySample(_instantForceHist, now, forceN);
+    _pushHistorySample(_peakForceHist, now, peakForceN);
+    _pushHistorySample(_rateHist, now, actualRpm);
+    _pushHistorySample(_angleHist, now, angleDeg);
+    _pushHistorySample(_countHist, now, compressionCount.toDouble());
+    _pushHistorySample(_depthHist, now, esp32.compressionDepth);
+    _pushHistorySample(_tempHist, now, esp32.motorTemp);
+    _pushHistorySample(
+      _directionHist,
+      now,
+      esp32.direction == 'CW' ? 1.0 : 0.0,
+    );
+
+    final loc = location;
+    final isOverForce = forceN > 95.0;
+    final summary = _computeAiSummary(
+      forceN: forceN,
+      actualRpm: actualRpm,
+      setRpm: setRpm,
+      isGpsLocked: loc.isGpsLocked,
+    );
+
     final aiPayload = <String, dynamic>{
       'timestamp': now.toUtc().toIso8601String(),
       'source': telemetrySource,
       'model_version': 'OtoCPR-Edge-v2.1',
       'inference': {
-        'classification': classification,
+        'classification': summary.classification,
         'confidence': isOverForce ? 0.962 : 0.984,
         'metrics': {
           'instant_force_N': double.parse(forceN.toStringAsFixed(1)),
@@ -487,16 +610,15 @@ class TelemetryRepository {
     final aiJson = encoder.convert(aiPayload);
 
     aiDiagnosticsNotifier.value = AiDiagnosticsData(
-      confidence: isOverForce ? 96.2 : 98.4,
-      classification: classification,
-      guidelineSubtitle:
-          'Live ${actualRpm.toStringAsFixed(0)} CPM · Force ${forceN.toStringAsFixed(1)} N · ${loc.isGpsLocked ? 'GPS Locked' : 'GPS Acquiring'}',
-      diagnosticInsight: insight,
-      tidalVolume: tidalVolume,
+      confidence: summary.confidence,
+      classification: summary.classification,
+      guidelineSubtitle: summary.guidelineSubtitle,
+      diagnosticInsight: summary.insight,
+      tidalVolume: summary.tidalVolume,
       strokeForce: double.parse(peakForceN.toStringAsFixed(1)),
-      recoilResidual: recoilResidual,
-      fatigueDrift: fatigueDrift,
-      sessionHealthIndex: healthScore,
+      recoilResidual: summary.recoilResidual,
+      fatigueDrift: summary.fatigueDrift,
+      sessionHealthIndex: summary.sessionHealthIndex,
       rawJson: aiJson,
     );
 
@@ -547,19 +669,27 @@ class TelemetryRepository {
       final sizeKb = (fullJson.length / 1024.0).toStringAsFixed(1);
       final seqLabel = seq.toString().padLeft(4, '0');
 
-      addLog(
-        TelemetryLogItem(
-          name: 'L${seqLabel}_esp32.json',
-          time: timeStr,
-          size: '$sizeKb KB',
-          status: isOverForce ? 'Derate' : 'Normal',
-          isDerate: isOverForce,
-          category: 'ESP32',
-          preview:
-              '{\n  "rpm": ${actualRpm.toStringAsFixed(1)},\n  "force_n": ${forceN.toStringAsFixed(1)},\n  "lat": ${loc.latitude.toStringAsFixed(5)},\n  "lon": ${loc.longitude.toStringAsFixed(5)}\n}',
-          fullJson: fullJson,
-        ),
+      final espLogItem = TelemetryLogItem(
+        name: 'L${seqLabel}_esp32.json',
+        time: timeStr,
+        size: '$sizeKb KB',
+        status: isOverForce ? 'Derate' : 'Normal',
+        isDerate: isOverForce,
+        category: 'ESP32',
+        preview:
+            '{\n  "rpm": ${actualRpm.toStringAsFixed(1)},\n  "force_n": ${forceN.toStringAsFixed(1)},\n  "lat": ${loc.latitude.toStringAsFixed(5)},\n  "lon": ${loc.longitude.toStringAsFixed(5)}\n}',
+        fullJson: fullJson,
       );
+      addLog(espLogItem);
+      if (_db != null) {
+        _pendingLogs.add(
+          _PendingLogRecord(
+            item: espLogItem,
+            source: telemetrySource,
+            createdAt: now,
+          ),
+        );
+      }
     }
 
     final shouldLogAi = _lastAiLogAt == null ||
@@ -573,20 +703,555 @@ class TelemetryRepository {
       final sizeKb = (aiJson.length / 1024.0).toStringAsFixed(1);
       final seqLabel = seq.toString().padLeft(4, '0');
 
-      addLog(
-        TelemetryLogItem(
-          name: 'L${seqLabel}_inference.json',
-          time: timeStr,
-          size: '$sizeKb KB',
-          status: isOverForce ? 'Derate' : 'Normal',
-          isDerate: isOverForce,
-          category: 'AI',
-          preview:
-              '{\n  "classification": "$classification",\n  "rpm": ${actualRpm.toStringAsFixed(1)},\n  "force_n": ${forceN.toStringAsFixed(1)}\n}',
-          fullJson: aiJson,
-        ),
+      final aiLogItem = TelemetryLogItem(
+        name: 'L${seqLabel}_inference.json',
+        time: timeStr,
+        size: '$sizeKb KB',
+        status: isOverForce ? 'Derate' : 'Normal',
+        isDerate: isOverForce,
+        category: 'AI',
+        preview:
+            '{\n  "classification": "${summary.classification}",\n  "rpm": ${actualRpm.toStringAsFixed(1)},\n  "force_n": ${forceN.toStringAsFixed(1)}\n}',
+        fullJson: aiJson,
       );
+      addLog(aiLogItem);
+      if (_db != null) {
+        _pendingLogs.add(
+          _PendingLogRecord(
+            item: aiLogItem,
+            source: telemetrySource,
+            createdAt: now,
+          ),
+        );
+      }
     }
+  }
+
+  // =========================================================================
+  // DRIFT LOCAL SQLITE PERSISTENCE (BATCHED WRITES & RESTORE ON STARTUP)
+  // =========================================================================
+
+  void _scheduleFlush({bool immediate = false}) {
+    if (_db == null) return;
+    if (immediate) {
+      _flushTimer?.cancel();
+      _flushTimer = null;
+      _writeChain = _writeChain.then((_) => _performFlush());
+      return;
+    }
+    _flushTimer ??= Timer(_flushDebounce, () {
+      _flushTimer = null;
+      _scheduleFlush(immediate: true);
+    });
+  }
+
+  /// Flushes any queued Wokwi/BLE telemetry samples and logs to Drift immediately.
+  Future<void> flushPendingWrites() {
+    _flushTimer?.cancel();
+    _flushTimer = null;
+    _writeChain = _writeChain.then((_) => _performFlush());
+    return _writeChain;
+  }
+
+  Future<void> _performFlush() async {
+    final db = _db;
+    if (db == null) return;
+    if (_pendingSamples.isEmpty && _pendingLogs.isEmpty) return;
+
+    final samplesToWrite = List<_PendingSampleRecord>.from(_pendingSamples);
+    final logsToWrite = List<_PendingLogRecord>.from(_pendingLogs);
+    _pendingSamples.clear();
+    _pendingLogs.clear();
+
+    try {
+      if (_activeSessionId == null) {
+        final firstSource = samplesToWrite.isNotEmpty
+            ? samplesToWrite.first.source
+            : logsToWrite.first.source;
+        final startedAt = samplesToWrite.isNotEmpty
+            ? samplesToWrite.first.recordedAt
+            : logsToWrite.first.createdAt;
+        _activeSessionId = await db.createSession(
+          source: firstSource,
+          deviceId: pairedDevice?.id ?? wokwiDeviceId,
+          startedAt: startedAt,
+        );
+        _activeSessionSampleCount = 0;
+        _activeSessionMaxPeakForce = 0.0;
+        _activeSessionTotalCompressions = 0;
+      }
+
+      final sessionId = _activeSessionId!;
+
+      if (samplesToWrite.isNotEmpty) {
+        final companions = samplesToWrite
+            .map(
+              (s) => TelemetrySamplesCompanion.insert(
+                sessionId: Value(sessionId),
+                recordedAt: Value(s.recordedAt),
+                source: s.source,
+                firmwareTimeMs: s.firmwareTimeMs,
+                setRpm: s.setRpm,
+                actualRpm: s.actualRpm,
+                pwm: s.pwm,
+                rawCounts: s.rawCounts,
+                freqHz: s.freqHz,
+                loadCellRaw: s.loadCellRaw,
+                instantForce: s.instantForce,
+                peakForce: s.peakForce,
+                positionAngle: s.positionAngle,
+                direction: s.direction,
+                compressionCount: s.compressionCount,
+                compressionDepth: s.compressionDepth,
+                motorTemp: s.motorTemp,
+                recoilOk: s.recoilOk,
+                anomalyFlag: s.anomalyFlag,
+                gpsFix: Value(s.gpsFix),
+                latitude: Value(s.latitude),
+                longitude: Value(s.longitude),
+                satellites: Value(s.satellites),
+                speedKmh: Value(s.speedKmh),
+                altitudeM: Value(s.altitudeM),
+                gpsUtc: Value(s.gpsUtc),
+              ),
+            )
+            .toList();
+        await db.insertSamplesBatch(companions);
+
+        _activeSessionSampleCount += samplesToWrite.length;
+        for (final s in samplesToWrite) {
+          if (s.peakForce > _activeSessionMaxPeakForce) {
+            _activeSessionMaxPeakForce = s.peakForce;
+          }
+          if (s.compressionCount > _activeSessionTotalCompressions) {
+            _activeSessionTotalCompressions = s.compressionCount;
+          }
+        }
+      }
+
+      if (logsToWrite.isNotEmpty) {
+        final logCompanions = logsToWrite
+            .map(
+              (l) => TelemetryLogsCompanion.insert(
+                sessionId: Value(sessionId),
+                name: l.item.name,
+                timeLabel: l.item.time,
+                sizeLabel: l.item.size,
+                status: l.item.status,
+                isDerate: l.item.isDerate,
+                category: l.item.category,
+                source: l.source,
+                preview: l.item.preview,
+                fullJson: l.item.fullJson,
+                createdAt: Value(l.createdAt),
+              ),
+            )
+            .toList();
+        await db.insertLogsBatch(logCompanions);
+      }
+
+      await db.updateSessionStats(
+        sessionId,
+        sampleCount: _activeSessionSampleCount,
+        maxPeakForce: _activeSessionMaxPeakForce,
+        totalCompressions: _activeSessionTotalCompressions,
+      );
+
+      await _refreshPersistedCounts();
+    } catch (e, st) {
+      debugPrint('Drift persistence flush error: $e\n$st');
+    }
+  }
+
+  Future<void> _finalizeActiveSession() async {
+    await flushPendingWrites();
+    final db = _db;
+    final sessionId = _activeSessionId;
+    if (db != null && sessionId != null) {
+      try {
+        await db.updateSessionStats(
+          sessionId,
+          sampleCount: _activeSessionSampleCount,
+          maxPeakForce: _activeSessionMaxPeakForce,
+          totalCompressions: _activeSessionTotalCompressions,
+          endedAt: DateTime.now(),
+        );
+        _activeSessionId = null;
+        _activeSessionSampleCount = 0;
+        _activeSessionMaxPeakForce = 0.0;
+        _activeSessionTotalCompressions = 0;
+        await _refreshPersistedCounts();
+      } catch (e, st) {
+        debugPrint('Drift finalize session error: $e\n$st');
+      }
+    }
+  }
+
+  Future<void> _refreshPersistedCounts() async {
+    final db = _db;
+    if (db == null) {
+      persistedSampleCountNotifier.value = 0;
+      persistedLogCountNotifier.value = 0;
+      persistedSessionCountNotifier.value = 0;
+      return;
+    }
+    persistedSampleCountNotifier.value = await db.countSamples();
+    persistedLogCountNotifier.value = await db.countLogs();
+    persistedSessionCountNotifier.value = await db.countSessions();
+  }
+
+  /// Attaches an [AppDatabase] instance and optionally restores saved data.
+  Future<void> attachDatabase(AppDatabase db, {bool loadExisting = true}) async {
+    if (identical(_db, db)) return;
+    if (_db != null) {
+      await _finalizeActiveSession();
+    }
+    _db = db;
+    if (loadExisting) {
+      await loadPersistedData();
+    } else {
+      await _refreshPersistedCounts();
+    }
+  }
+
+  /// Restores persisted telemetry history, last sensor snapshot, GPS fix, and logs from Drift.
+  Future<void> loadPersistedData() async {
+    final db = _db;
+    if (db == null) return;
+
+    final samples = await db.getRecentSamples(limit: _maxHistorySamples);
+    final dbLogs = await db.getRecentLogs(limit: _maxLogEntries);
+    await _refreshPersistedCounts();
+
+    if (samples.isNotEmpty) {
+      _instantForceHist.clear();
+      _peakForceHist.clear();
+      _rateHist.clear();
+      _angleHist.clear();
+      _countHist.clear();
+      _depthHist.clear();
+      _tempHist.clear();
+      _directionHist.clear();
+
+      for (final s in samples) {
+        _instantForceHist.add(_MetricSample(s.recordedAt, s.instantForce));
+        _peakForceHist.add(_MetricSample(s.recordedAt, s.peakForce));
+        _rateHist.add(_MetricSample(s.recordedAt, s.actualRpm));
+        _angleHist.add(_MetricSample(s.recordedAt, s.positionAngle));
+        _countHist.add(
+          _MetricSample(s.recordedAt, s.compressionCount.toDouble()),
+        );
+        _depthHist.add(_MetricSample(s.recordedAt, s.compressionDepth));
+        _tempHist.add(_MetricSample(s.recordedAt, s.motorTemp));
+        _directionHist.add(
+          _MetricSample(s.recordedAt, s.direction == 'CW' ? 1.0 : 0.0),
+        );
+      }
+
+      final latest = samples.last;
+      _lastAngleDeg = latest.positionAngle;
+      esp32Notifier.value = esp32.copyWith(
+        instantForce: latest.instantForce,
+        peakForce: latest.peakForce,
+        positionAngle: latest.positionAngle,
+        motorSpeed: latest.actualRpm,
+        compressionRate: latest.actualRpm,
+        direction: latest.direction,
+        compressionCount: latest.compressionCount,
+        compressionDepth: latest.compressionDepth,
+        motorTemp: latest.motorTemp,
+        recoilOk: latest.recoilOk,
+        anomalyFlag: latest.anomalyFlag,
+        timestamp: latest.recordedAt,
+      );
+
+      TelemetrySample? gpsSample;
+      for (int i = samples.length - 1; i >= 0; i--) {
+        final s = samples[i];
+        if (s.latitude != null && s.longitude != null) {
+          gpsSample = s;
+          break;
+        }
+      }
+      if (gpsSample != null) {
+        final sats = gpsSample.satellites ?? location.satellites;
+        final estHdop = sats > 0
+            ? double.parse((0.7 + 6.0 / sats).toStringAsFixed(2))
+            : 99.99;
+        _prevHeadingLat = gpsSample.latitude!;
+        _prevHeadingLon = gpsSample.longitude!;
+        locationNotifier.value = location.copyWith(
+          latitude: gpsSample.latitude,
+          longitude: gpsSample.longitude,
+          altitude: gpsSample.altitudeM ?? location.altitude,
+          speed: gpsSample.speedKmh ?? location.speed,
+          hdop: estHdop,
+          satellites: sats,
+          isGpsLocked: gpsSample.gpsFix,
+          fixType: gpsSample.gpsFix
+              ? (sats >= 4 ? '3D Fix (NEO-6M)' : '2D Fix (NEO-6M)')
+              : 'Acquiring ($sats sats)',
+          lastFixTime: gpsSample.recordedAt,
+        );
+      }
+
+      if (!isExternalStreamActive) {
+        _stopLiveSimulation();
+        telemetrySourceNotifier.value = 'Local Drift DB (${latest.source})';
+      }
+    }
+
+    if (dbLogs.isNotEmpty) {
+      logsNotifier.value = dbLogs
+          .map(
+            (row) => TelemetryLogItem(
+              name: row.name,
+              time: row.timeLabel,
+              size: row.sizeLabel,
+              status: row.status,
+              isDerate: row.isDerate,
+              category: row.category,
+              preview: row.preview,
+              fullJson: row.fullJson,
+            ),
+          )
+          .toList();
+
+      int maxSeq = dbLogs.length;
+      final seqRegex = RegExp(r'^L(\d+)_');
+      for (final row in dbLogs) {
+        final match = seqRegex.firstMatch(row.name);
+        if (match != null) {
+          final parsedSeq = int.tryParse(match.group(1)!);
+          if (parsedSeq != null && parsedSeq > maxSeq) {
+            maxSeq = parsedSeq;
+          }
+        }
+      }
+      _liveLogSeq = maxSeq;
+    }
+
+    _restoreAiDiagnostics(dbLogs, samples);
+  }
+
+  void _restoreAiDiagnostics(
+    List<TelemetryLog> dbLogs,
+    List<TelemetrySample> samples,
+  ) {
+    if (samples.isNotEmpty) {
+      final s = samples.last;
+      final isGpsLocked = s.gpsFix;
+      final summary = _computeAiSummary(
+        forceN: s.instantForce,
+        actualRpm: s.actualRpm,
+        setRpm: s.setRpm,
+        isGpsLocked: isGpsLocked,
+        subtitlePrefix: 'Saved',
+      );
+      final payload = <String, dynamic>{
+        'timestamp': s.recordedAt.toUtc().toIso8601String(),
+        'source': s.source,
+        'model_version': 'OtoCPR-Edge-v2.1',
+        'inference': {
+          'classification': summary.classification,
+          'confidence': s.anomalyFlag ? 0.962 : 0.984,
+          'metrics': {
+            'instant_force_N': s.instantForce,
+            'peak_force_N': s.peakForce,
+            'motor_rpm': s.actualRpm,
+            'shaft_angle_deg': s.positionAngle,
+            'pwm': s.pwm,
+            'recoil_ok': s.recoilOk,
+          },
+          'gps': {
+            'locked': isGpsLocked,
+            'latitude': s.latitude ?? location.latitude,
+            'longitude': s.longitude ?? location.longitude,
+            'satellites': s.satellites ?? location.satellites,
+          },
+          'anomaly_flag': s.anomalyFlag,
+        },
+      };
+      aiDiagnosticsNotifier.value = AiDiagnosticsData(
+        confidence: summary.confidence,
+        classification: summary.classification,
+        guidelineSubtitle: summary.guidelineSubtitle,
+        diagnosticInsight: summary.insight,
+        tidalVolume: summary.tidalVolume,
+        strokeForce: double.parse(s.peakForce.toStringAsFixed(1)),
+        recoilResidual: summary.recoilResidual,
+        fatigueDrift: summary.fatigueDrift,
+        sessionHealthIndex: summary.sessionHealthIndex,
+        rawJson: const JsonEncoder.withIndent('  ').convert(payload),
+      );
+      return;
+    }
+
+    TelemetryLog? latestAiLog;
+    for (final row in dbLogs) {
+      if (row.category == 'AI') {
+        latestAiLog = row;
+        break;
+      }
+    }
+    if (latestAiLog == null) return;
+
+    double forceN = esp32.instantForce;
+    double peakForceN = esp32.peakForce;
+    double actualRpm = esp32.motorSpeed;
+    bool isGpsLocked = location.isGpsLocked;
+    String? decodedClassification;
+    double? decodedConfidence;
+
+    try {
+      final decoded = jsonDecode(latestAiLog.fullJson);
+      if (decoded is Map<String, dynamic>) {
+        final inference = decoded['inference'];
+        if (inference is Map<String, dynamic>) {
+          final cls = inference['classification'];
+          if (cls is String && cls.isNotEmpty) {
+            decodedClassification = cls;
+          }
+          final conf = inference['confidence'];
+          if (conf is num) {
+            decodedConfidence = conf <= 1.0
+                ? double.parse((conf * 100.0).toStringAsFixed(1))
+                : conf.toDouble();
+          }
+          final metrics = inference['metrics'];
+          if (metrics is Map<String, dynamic>) {
+            forceN =
+                (metrics['instant_force_N'] as num?)?.toDouble() ?? forceN;
+            peakForceN =
+                (metrics['peak_force_N'] as num?)?.toDouble() ?? peakForceN;
+            actualRpm =
+                (metrics['motor_rpm'] as num?)?.toDouble() ?? actualRpm;
+          }
+          final gps = inference['gps'];
+          if (gps is Map<String, dynamic>) {
+            isGpsLocked = (gps['locked'] as bool?) ?? isGpsLocked;
+          }
+        }
+      }
+    } catch (_) {
+      // Fall back to default AI summary values if stored JSON cannot be parsed.
+    }
+
+    final summary = _computeAiSummary(
+      forceN: forceN,
+      actualRpm: actualRpm,
+      setRpm: 100.0,
+      isGpsLocked: isGpsLocked,
+      subtitlePrefix: 'Saved',
+    );
+
+    aiDiagnosticsNotifier.value = AiDiagnosticsData(
+      confidence: decodedConfidence ?? summary.confidence,
+      classification: decodedClassification ?? summary.classification,
+      guidelineSubtitle: summary.guidelineSubtitle,
+      diagnosticInsight: summary.insight,
+      tidalVolume: summary.tidalVolume,
+      strokeForce: double.parse(peakForceN.toStringAsFixed(1)),
+      recoilResidual: summary.recoilResidual,
+      fatigueDrift: summary.fatigueDrift,
+      sessionHealthIndex: summary.sessionHealthIndex,
+      rawJson: latestAiLog.fullJson,
+    );
+  }
+
+  /// Clears all persisted samples, logs, and sessions from Drift and resets history.
+  Future<void> clearPersistedData() async {
+    _flushTimer?.cancel();
+    _flushTimer = null;
+    _pendingSamples.clear();
+    _pendingLogs.clear();
+    await _writeChain;
+    _pendingSamples.clear();
+    _pendingLogs.clear();
+    _activeSessionId = null;
+    _activeSessionSampleCount = 0;
+    _activeSessionMaxPeakForce = 0.0;
+    _activeSessionTotalCompressions = 0;
+
+    final db = _db;
+    if (db != null) {
+      await db.clearAllTelemetryData();
+    }
+
+    _instantForceHistory?.clear();
+    _peakForceHistory?.clear();
+    _rateHistory?.clear();
+    _angleHistory?.clear();
+    _countHistory?.clear();
+    _depthHistory?.clear();
+    _tempHistory?.clear();
+    _directionHistory?.clear();
+    logsNotifier.value = [];
+    _liveLogSeq = 0;
+    _lastEspLogAt = null;
+    _lastAiLogAt = null;
+    _lastLoggedGpsFix = null;
+    persistedSampleCountNotifier.value = 0;
+    persistedLogCountNotifier.value = 0;
+    persistedSessionCountNotifier.value = 0;
+  }
+
+  /// Detaches the attached [AppDatabase] (optionally flushing pending writes first).
+  Future<void> detachDatabase({bool flush = true}) async {
+    if (flush) {
+      await _finalizeActiveSession();
+    } else {
+      _flushTimer?.cancel();
+      _flushTimer = null;
+      _pendingSamples.clear();
+      _pendingLogs.clear();
+      await _writeChain;
+    }
+    _activeSessionId = null;
+    _activeSessionSampleCount = 0;
+    _activeSessionMaxPeakForce = 0.0;
+    _activeSessionTotalCompressions = 0;
+    _db = null;
+  }
+
+  /// Resets in-memory repository state and detaches any test database.
+  @visibleForTesting
+  Future<void> resetForTesting() async {
+    _handshakeTimer?.cancel();
+    _handshakeTimer = null;
+    _stopLiveSimulation();
+    await _wokwiClient.disconnect();
+    await _bleLineSub?.cancel();
+    _bleLineSub = null;
+    await detachDatabase(flush: false);
+
+    _instantForceHistory?.clear();
+    _peakForceHistory?.clear();
+    _rateHistory?.clear();
+    _angleHistory?.clear();
+    _countHistory?.clear();
+    _depthHistory?.clear();
+    _tempHistory?.clear();
+    _directionHistory?.clear();
+
+    _lastAngleDeg = 142.5;
+    _prevHeadingLat = -6.2088;
+    _prevHeadingLon = 106.8456;
+    _lastEspLogAt = null;
+    _lastAiLogAt = null;
+    _lastLoggedGpsFix = null;
+    _liveLogSeq = null;
+
+    esp32Notifier.value = Esp32Telemetry.initial();
+    locationNotifier.value = const DeviceLocationData();
+    aiDiagnosticsNotifier.value = AiDiagnosticsData.initial();
+    logsNotifier.value = _initialLogs;
+    connectionStatusNotifier.value = Esp32ConnectionStatus.connected;
+    connectionFeedbackNotifier.value = 'Connected';
+    telemetrySourceNotifier.value = 'Internal Demo Sim';
+    persistedSampleCountNotifier.value = 0;
+    persistedLogCountNotifier.value = 0;
+    persistedSessionCountNotifier.value = 0;
   }
 
   // =========================================================================
@@ -759,6 +1424,7 @@ class TelemetryRepository {
     _handshakeTimer?.cancel();
     _wokwiClient.disconnect();
     _stopLiveSimulation();
+    unawaited(_finalizeActiveSession());
     telemetrySourceNotifier.value = 'Disconnected';
     connectionStatusNotifier.value = Esp32ConnectionStatus.disconnected;
     connectionFeedbackNotifier.value = 'Disconnected';
@@ -825,6 +1491,9 @@ class TelemetryRepository {
   }
 
   Future<void> disposeStreams() async {
+    _flushTimer?.cancel();
+    _flushTimer = null;
+    await _finalizeActiveSession();
     await _wokwiLineSub?.cancel();
     await _wokwiStateSub?.cancel();
     await _bleLineSub?.cancel();
@@ -855,7 +1524,8 @@ class TelemetryRepository {
     if (maxAge == null) {
       return live.map((s) => s.value).toList();
     }
-    final cutoff = DateTime.now().subtract(maxAge);
+    final anchor = isExternalStreamActive ? DateTime.now() : live.last.time;
+    final cutoff = anchor.subtract(maxAge);
     final filtered = live
         .where((s) => !s.time.isBefore(cutoff))
         .map((s) => s.value)
@@ -1259,4 +1929,94 @@ class _MetricSample {
   final DateTime time;
   final double value;
   const _MetricSample(this.time, this.value);
+}
+
+class _PendingSampleRecord {
+  final DateTime recordedAt;
+  final String source;
+  final int firmwareTimeMs;
+  final double setRpm;
+  final double actualRpm;
+  final int pwm;
+  final int rawCounts;
+  final double freqHz;
+  final double loadCellRaw;
+  final double instantForce;
+  final double peakForce;
+  final double positionAngle;
+  final String direction;
+  final int compressionCount;
+  final double compressionDepth;
+  final double motorTemp;
+  final bool recoilOk;
+  final bool anomalyFlag;
+  final bool gpsFix;
+  final double? latitude;
+  final double? longitude;
+  final int? satellites;
+  final double? speedKmh;
+  final double? altitudeM;
+  final String? gpsUtc;
+
+  const _PendingSampleRecord({
+    required this.recordedAt,
+    required this.source,
+    required this.firmwareTimeMs,
+    required this.setRpm,
+    required this.actualRpm,
+    required this.pwm,
+    required this.rawCounts,
+    required this.freqHz,
+    required this.loadCellRaw,
+    required this.instantForce,
+    required this.peakForce,
+    required this.positionAngle,
+    required this.direction,
+    required this.compressionCount,
+    required this.compressionDepth,
+    required this.motorTemp,
+    required this.recoilOk,
+    required this.anomalyFlag,
+    required this.gpsFix,
+    required this.latitude,
+    required this.longitude,
+    required this.satellites,
+    required this.speedKmh,
+    required this.altitudeM,
+    required this.gpsUtc,
+  });
+}
+
+class _PendingLogRecord {
+  final TelemetryLogItem item;
+  final String source;
+  final DateTime createdAt;
+
+  const _PendingLogRecord({
+    required this.item,
+    required this.source,
+    required this.createdAt,
+  });
+}
+
+class _AiSummaryResult {
+  final String classification;
+  final String guidelineSubtitle;
+  final String insight;
+  final double confidence;
+  final double tidalVolume;
+  final double recoilResidual;
+  final double fatigueDrift;
+  final double sessionHealthIndex;
+
+  const _AiSummaryResult({
+    required this.classification,
+    required this.guidelineSubtitle,
+    required this.insight,
+    required this.confidence,
+    required this.tidalVolume,
+    required this.recoilResidual,
+    required this.fatigueDrift,
+    required this.sessionHealthIndex,
+  });
 }

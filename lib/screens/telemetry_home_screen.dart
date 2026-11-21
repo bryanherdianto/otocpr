@@ -114,6 +114,9 @@ class _TelemetryHomeScreenState extends State<TelemetryHomeScreen> {
                             repo.locationNotifier,
                             repo.connectionStatusNotifier,
                             repo.telemetrySourceNotifier,
+                            repo.persistedSampleCountNotifier,
+                            repo.persistedLogCountNotifier,
+                            repo.persistedSessionCountNotifier,
                           ]),
                           builder: (context, _) {
                             final esp = repo.esp32;
@@ -217,6 +220,65 @@ class _TelemetryHomeScreenState extends State<TelemetryHomeScreen> {
                                   isMonospace: true,
                                 ),
 
+                                const SizedBox(height: 20),
+
+                                // Section: Local Storage (Drift SQLite)
+                                _buildDiagSectionHeader('LOCAL STORAGE (DRIFT SQLITE)'),
+                                _buildDiagTile(
+                                  label: 'Database Engine',
+                                  value: repo.hasDatabase
+                                      ? 'Drift SQLite (Active)'
+                                      : 'In-Memory Only',
+                                  valueColor: repo.hasDatabase
+                                      ? AppColors.cyan
+                                      : AppColors.gray,
+                                ),
+                                _buildDiagTile(
+                                  label: 'Saved Telemetry Rows',
+                                  value: '${repo.persistedSampleCount} samples',
+                                  isMonospace: true,
+                                ),
+                                _buildDiagTile(
+                                  label: 'Saved Machine Logs',
+                                  value: '${repo.persistedLogCount} logs',
+                                  isMonospace: true,
+                                ),
+                                _buildDiagTile(
+                                  label: 'Recorded Sessions',
+                                  value: '${repo.persistedSessionCount} sessions',
+                                  isMonospace: true,
+                                ),
+                                const SizedBox(height: 8),
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: OutlinedButton.icon(
+                                    onPressed: () =>
+                                        _confirmClearPersistedData(context),
+                                    icon: const Icon(
+                                      Icons.delete_outline_rounded,
+                                      size: 16,
+                                      color: AppColors.red,
+                                    ),
+                                    label: Text(
+                                      'Clear Saved Data',
+                                      style: AppTypography.sans(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.red,
+                                      ),
+                                    ),
+                                    style: OutlinedButton.styleFrom(
+                                      side: BorderSide(
+                                        color: AppColors.red.withValues(alpha: 0.5),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(vertical: 10),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
                                 const SizedBox(height: 24),
                               ],
                             );
@@ -229,6 +291,56 @@ class _TelemetryHomeScreenState extends State<TelemetryHomeScreen> {
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+  void _confirmClearPersistedData(BuildContext context) {
+    final repo = TelemetryRepository.instance;
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF141724),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
+          ),
+          title: Text(
+            'Clear Saved Drift Data?',
+            style: AppTypography.sans(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            'This will permanently remove all saved Wokwi/BLE telemetry samples, sessions, and machine logs from the local Drift database.',
+            style: AppTypography.sans(fontSize: 13, color: AppColors.gray, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text('Cancel', style: AppTypography.sans(color: AppColors.gray)),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.pop(dialogContext);
+                await repo.clearPersistedData();
+                if (mounted) {
+                  ScaffoldMessenger.of(this.context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Cleared all saved Drift telemetry data'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.red,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: Text('Clear Data', style: AppTypography.sans(fontWeight: FontWeight.bold)),
+            ),
+          ],
         );
       },
     );
